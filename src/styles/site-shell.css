@@ -1,0 +1,44 @@
+:root {
+  color-scheme: dark;
+  --bg: #161513;
+  --panel: #1d1b19;
+  --text: #d7d0c4;
+  --muted: #aaa294;
+  --line: #302d28;
+  --link: #e5ded1;
+  --focus: #cab27a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.85 "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+}
+
+main {
+  width: min(100%, 43rem);
+  margin: 0 auto;
+  padding: 52px 24px 88px;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: 40px 20px 68px;
+  }
+}

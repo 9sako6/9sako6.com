@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>#define int long longは何がいけないのか | 9sako6</title>
+    <meta name="description" content="`#define int long long`を許さない派をたまに見かけますが、本当に許されないほどのものなのでしょうか。一応、使うべきでないとまで言える根拠はあります。 「キーワード（他言語でいうところのだいたい予約語）をdefineするのは未定義動作だから」です。 そもそもintに限らず、キーワードをdefineするのは未定義動作なのです。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>#define int long longは何がいけないのか</h1>
+        <blog-post-meta date="2020-04-07T23:35:00.000+09:00"></blog-post-meta>
+        <div class="content" data-render-math="true"><h1>はじめに</h1>
+<p>C++で競技プログラミングをしていると目にする<code>#define int long long</code>。
+これをするとある程度はオーバーフローを気にしなくて良くなる反面、main関数の戻り値の型をintにする工夫をしないといけなくなったり、見た目はint型の変数で<code>printf(&quot;%lld&quot;, hoge);</code>しないといけなくなったりします。</p>
+<p>最近Twitterで<code>#include &lt;bits/stdc++.h&gt;</code>や<code>#define int long long</code>の是非が議論されていました。（<code>#include &lt;bits/stdc++.h&gt;</code>に至ってはトレンド入りするほどに！）その中で、<code>#define int long long</code>は許さない、という主張をそこそこみかけました[要出典]。さらに、<code>#define int long long</code>を使っている人でさえ、これを使うことに多少なりとも肩身が狭い思いをしているように見えました[要出典]。</p>
+<p>冒頭で述べたように、<code>#define int long long</code>にはいくつか美しさに欠ける点があります。とはいえ、これは許されないほどの行為なのでしょうか。</p>
+<h1><code>#define int long long</code>の問題点</h1>
+<p>一応、<code>#define int long long</code>を使うべきでないとまで言える根拠はあります。「<strong>キーワード（他言語でいうところのだいたい予約語）をdefineするのは未定義動作だから</strong>」です。
+そもそもintに限らず、キーワードをdefineするのは未定義動作なのです。</p>
+<p><a href="https://en.cppreference.com/w/cpp/preprocessor/replace">Replacing text macros - cppreference.com</a>のReserved macro namesに書いてあります。</p>
+<blockquote>
+<p>A translation unit that uses any part of the standard library may not #define or #undef names lexically identical to:</p>
+<ul>
+<li>keywords</li>
+<li>identifiers with special meaning (since C++11)</li>
+<li>any standard attribute token (since C++11)</li>
+</ul>
+<p>except that likely and unlikely may be defined as function-like macros.(since C++20)
+Otherwise, the behavior is undefined.</p>
+</blockquote>
+<h1>GCCでは許される</h1>
+<p>しかし、GCCではキーワードをdefineすることができます。</p>
+<p><a href="https://gcc.gnu.org/onlinedocs/cpp/Macros.html#Macros">3 Macros - GCC online documentation</a>に書いてあります。</p>
+<blockquote>
+<p>You may define any valid identifier as a macro, even if it is a C keyword.</p>
+</blockquote>
+<p>Clangやその他においてどうなのかはわからなかったので、ご存知の方がいたらぜひくさころ（<a href="https://twitter.com/9sako6">@9sako6</a>）に教えてください。</p>
+<h1>結論</h1>
+<p>GCCを使っているなら<code>#define int long long</code>しても問題なさそう。あとは可読性や好みの話になるのでしょう。</p>
+<h1>参考</h1>
+<ol>
+<li><a href="https://en.cppreference.com/w/cpp/preprocessor/replace">Replacing text macros - cppreference.com</a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/cpp/Macros.html#Macros">3 Macros - GCC online documentation</a></li>
+<li><a href="https://twitter.com/__KasSA/status/1247178818076299265">https://twitter.com/__KasSA/status/1247178818076299265</a></li>
+<li><a href="https://twitter.com/__KasSA/status/1247193760909254656">https://twitter.com/__KasSA/status/1247193760909254656</a></li>
+</ol>
+<p>Thanks!</p>
+</div>
+      </article>
+    </main>
+  </body>
+</html>

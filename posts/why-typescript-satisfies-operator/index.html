@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TypeScript の satisfies 演算子は何に役立つのか | 9sako6</title>
+    <meta name="description" content="TypeScript 4.9 で導入された satisfies 演算子は、式 satisfies 型 のようにして使い、式 が 型にマッチするかどうかをチェックします。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>TypeScript の satisfies 演算子は何に役立つのか</h1>
+        <blog-post-meta date="2023-07-01T16:38:44.902+09:00"></blog-post-meta>
+        <div class="content" data-render-math="true"><h1><code>satisfies</code> 演算子とは</h1>
+<p><a href="https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#the-satisfies-operator">TypeScript 4.9 で導入された</a> <code>satisfies</code> 演算子は、<code>式 satisfies 型</code> のようにして使い、式 が 型にマッチするかどうかをチェックします。</p>
+<p><code>satisfies</code> は、</p>
+<ul>
+<li>式がある型にマッチすることを保証しつつ、文脈的に型付けする</li>
+<li>式 が 型にマッチするかどうかをチェックし、型アノテーションとは違い、型推論結果を保つ</li>
+</ul>
+<p>という演算子です。</p>
+<pre><code class="language-typescript">type User = { email: string };
+// OK
+const jane = { email: &quot;jane@example.com&quot; } satisfies User;
+// Error
+const john = { email: &quot;john@example.com&quot;, id: 1 } satisfies User;
+//                                        ~~ Object literal may only specify
+// known properties, and &#39;id&#39; does not exist in type &#39;User&#39;.
+
+// Type annotation
+const taro: User = { email: &quot;taro@example.com&quot; };
+</code></pre>
+<p>上記の例で、<code>jane</code> は <code>{ email: string }</code> 型です。一方、型アノテーションをつけた <code>taro</code> は <code>User</code> 型です。
+<code>satisfies</code> を使った場合はオブジェクトリテラルの型がそのまま保持されています。型推論結果を保つ、という特徴の便利さは、以降ご紹介するシナリオでも実感いただけると思います。</p>
+<h1>結局何に使うの？</h1>
+<p><code>satisfies</code> が輝くシナリオを紹介していきます。</p>
+<ul>
+<li>オブジェクトのキーが充足しているかチェックする</li>
+<li>型推論を残して型の可読性を高める</li>
+</ul>
+<h1>オブジェクトのキーが充足しているかチェックする</h1>
+<p>オブジェクトのキーが、あらかじめ定義された集合から成ることをチェックしたい場合、
+<code>satisfies</code> を使うとオブジェクトのキーが全て揃っていることをチェックできます。</p>
+<pre><code class="language-typescript">type Color = &quot;red&quot; | &quot;green&quot; | &quot;blue&quot;;
+
+// OK
+const palette = {
+  red: [255, 0, 0],
+  green: &quot;#00ff00&quot;,
+  blue: &quot;#0000ff&quot;,
+} satisfies Record&lt;Color, unknown&gt;;
+</code></pre>
+<p><code>satisfies</code> を使えば、キーが足りない場合は型エラーになります。</p>
+<pre><code class="language-typescript">// キーが足りない
+const wip_palette = {
+  red: [255, 0, 0],
+  green: &quot;#00ff00&quot;,
+} satisfies Record&lt;Color, unknown&gt;;
+// ~~~~~~~~
+// Property &#39;blue&#39; is missing
+</code></pre>
+<p>余分なキーがある場合も型エラーになります。</p>
+<pre><code class="language-typescript">// 余分なキーがある
+const rainbow = {
+  red: [255, 0, 0],
+  green: &quot;#00ff00&quot;,
+  blue: &quot;#0000ff&quot;,
+  orange: &quot;#ffa500&quot;,
+  //  ~~~~~~ Object literal may only specify known properties,
+  // and &#39;orange&#39; does not exist in type &#39;Record&lt;Color, unknown&gt;&#39;.
+} satisfies Record&lt;Color, unknown&gt;;
+</code></pre>
+<p>型アノテーションでもプロパティのキーが充足しているかをチェックできますが、<code>satisfies</code> を使うと型推論が保持されるのが特徴です。
+したがって、<code>red</code> が <code>number[]</code> 型であることが保持されるので、<code>palette.red</code> を配列として扱うことができます。</p>
+<pre><code class="language-typescript">type Color = &quot;red&quot; | &quot;green&quot; | &quot;blue&quot;;
+
+const palette = {
+  red: [255, 0, 0],
+  green: &quot;#00ff00&quot;,
+  blue: &quot;#0000ff&quot;,
+} satisfies Record&lt;Color, unknown&gt;;
+
+const r = palette.red[0];
+</code></pre>
+<p>型アノテーションの場合は各キーで取得した値が <code>unknown</code> 型になるので、同じようにはいきません。
+<code>Record&lt;Color, string | number[]&gt;</code> を型アノテーションしたとて、値は <code>string | number[]</code> 型になるので、型を絞り込まないと配列として扱うことはできません。</p>
+<p>以上のように、<code>satisfies</code> は型推論を保持しつつ、オブジェクトのキーが充足しているかチェックするのに役立ちます。</p>
+<p>もう一つ実用的な例を出しておきます。
+広い型を受け取る関数にオブジェクトリテラルを渡す際、<code>satisfies</code> で型チェックをすることができます。
+例えば、<a href="https://github.com/colinhacks/zod">Zod</a> のようなランタイムでの validator にオブジェクトを渡す場合です。</p>
+<pre><code class="language-typescript">const post = PostSchema.parse({
+  title: &quot;Lorem Ipsum&quot;,
+  description: &quot;Neque porro quisquam est&quot;,
+} satisfies PostSchema);
+</code></pre>
+<p>その他にも、例えば Firestore のようなスキーマレスのデータストアに保存するオブジェクトリテラルに型チェックをすることができます。</p>
+<pre><code class="language-typescript">type User = {
+  name: string;
+  age: number;
+};
+
+await db
+  .collection(&quot;users&quot;)
+  .doc(&quot;2ddb6c99-be69-4ef1-9375-93c05d11462d&quot;)
+  .set({
+    name: &quot;Jane Doe&quot;,
+    age: 18,
+  } satisfies User);
+</code></pre>
+<h1>型推論を残して型の可読性を高める</h1>
+<p><code>satisfies</code> を使うことにより、型推論しつつ、読みやすい推論結果を残すことができます。
+実例を添えて説明してみます。Puppeteer のコードを説明に使わせていただきます。</p>
+<p><a href="https://github.com/puppeteer/puppeteer/blob/58e9c64f6364fc1663995d4136445cdc8fab9292/packages/puppeteer-core/src/api/Input.ts#L292">https://github.com/puppeteer/puppeteer/blob/58e9c64f6364fc1663995d4136445cdc8fab9292/packages/puppeteer-core/src/api/Input.ts#L292</a></p>
+<p><code>satisfies</code> を使わない場合の問題を考えるために、以下のような <code>MouseButton</code> を考えます。</p>
+<pre><code class="language-typescript">export const MouseButton: Record&lt;string, Protocol.Input.MouseButton&gt; =
+  Object.freeze({
+    Left: &quot;left&quot;,
+    Right: &quot;right&quot;,
+    Middle: &quot;middle&quot;,
+    Back: &quot;back&quot;,
+    Forward: &quot;forward&quot;,
+  });
+</code></pre>
+<p>型アノテーションがついており、<code>MouseButton</code> は <code>Record&lt;string, Protocol.Input.MouseButton&gt;</code> 型です。
+プロパティの値は <code>Protocol.Input.MouseButton</code> 型である必要があるので、例えば <code>forwrad</code> のようなミスをしても型エラーになってくれます。
+今のところ何も問題なさそうですね。</p>
+<p>では、エディタで <code>MouseButton</code> にカーソルを当てて表示される型はどうなっているでしょうか。
+やってみると以下のようになります。</p>
+<p><img src="/images/why-typescript-satisfies-operator-bad.png" alt=""></p>
+<p>何も間違ってはいませんが、型定義にジャンプしない限りは中身がどうなっているのかわかりません。</p>
+<p>もちろん <code>{Left: &#39;left&#39;; Right: &#39;right&#39;; Middle: &#39;middle&#39;; Back: &#39;back&#39;; Forward: &#39;forward&#39;;}</code> 型をアノテーションすれば問題なくなりますが、Union 型で値の集合を定義しておきたいという本来の意図から外れてしまします。</p>
+<p>今度は型アノテーションではなく、<code>satisfies</code> を使ってみましょう。</p>
+<pre><code class="language-typescript">export const MouseButton = Object.freeze({
+  Left: &quot;left&quot;,
+  Right: &quot;right&quot;,
+  Middle: &quot;middle&quot;,
+  Back: &quot;back&quot;,
+  Forward: &quot;forward&quot;,
+}) satisfies Record&lt;string, Protocol.Input.MouseButton&gt;;
+</code></pre>
+<p>型アノテーションした場合と同様に、<code>forwrad</code> みたいなタイポをしていたら型エラーになります。</p>
+<p>さらに、<code>satisfies</code> が型推論を保持する性質がここで効いてきます。
+エディタで <code>MouseButton</code> にカーソルを当てると、型の中身がわかります。</p>
+<p><img src="/images/why-typescript-satisfies-operator-good.png" alt=""></p>
+<p><code>satisfies</code> を使うことにより、型推論しつつ、読みやすい推論結果を残すことができました。</p>
+<p>ちなみに、これは VSCode の拡張機能 Prettify TypeScript でも実現することができます。Prettify TypeScript は、エディタ上でホバーしたときの型を整形して、以下のように表示してくれます。</p>
+<p><img src="/images/why-typescript-satisfies-operator-extension.png" alt="Prettify TypeScript example"></p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=MylesMurphy.prettify-ts">https://marketplace.visualstudio.com/items?itemName=MylesMurphy.prettify-ts</a></p>
+<h1>参考</h1>
+<p><a href="https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#the-satisfies-operator">https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#the-satisfies-operator</a></p>
+<p><a href="https://github.com/microsoft/TypeScript/issues/47920">https://github.com/microsoft/TypeScript/issues/47920</a></p>
+</div>
+      </article>
+    </main>
+  </body>
+</html>

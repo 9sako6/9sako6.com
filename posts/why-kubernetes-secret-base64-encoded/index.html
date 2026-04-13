@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>なぜ Kubernetes の Secret は base64 エンコードするのか | 9sako6</title>
+    <meta name="description" content="テキストデータだけでなく、バイナリデータも扱いたいからだと思われます。 base64 エンコードすればどんなデータでも文字列にすることができるので、例えばバイナリデータを扱うこともできます。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>なぜ Kubernetes の Secret は base64 エンコードするのか</h1>
+        <blog-post-meta date="2024-01-07T13:15:00.000Z"></blog-post-meta>
+        <div class="content" data-render-math="true"><h1>結論と経緯</h1>
+<p>テキストデータだけでなく、バイナリデータも扱いたいからだと思われます。
+base64 エンコードすればどんなデータでも文字列にすることができるので、例えばバイナリデータを扱うこともできます。</p>
+<p>しかし、新たな疑問が湧いてきました。
+バイナリデータを扱いたいなら、バイナリデータを扱うときに base64 エンコードして使えばいいのであって、エンコードが不要なテキストデータに対してもわざわざ毎回 base64 エンコードすることを求める必要があるんでしょうか。</p>
+<p>2015年、Secret が実装されたらしき頃の PR にヒントとなるコメントを見つけました。</p>
+<p><a href="https://github.com/kubernetes/kubernetes/pull/4514#discussion_r25192003">https://github.com/kubernetes/kubernetes/pull/4514#discussion_r25192003</a></p>
+<p>PR の作者がコメントにて、全てを base64 エンコードする必要はないのではないかと考えている、と述べています。
+バイナリであることを示すフラグを用意して、バイナリのときは base64 エンコードし、文字列ならそのまま渡せばいいのではないかという案です。</p>
+<blockquote>
+<p>@thockin @bgrant0607, I was thinking about the Data field this weekend -
+I think there&#39;s a case to be made for using a list of a type like:</p>
+<pre><code>type SecretCell struct {
+    Name  string
+    Value string
+    Binary bool
+</code></pre>
+<p>I don&#39;t think you should have to base64 encode everything - it makes for
+kind of a crummy experience IMO, especially when the serialized form is a
+string anyway. The binary bit would indicate whether the string is just a
+normal string or base64 encoded binary data.</p>
+</blockquote>
+<p>これに対しての返事で、「常に base64 エンコードするくどさ」が「時々 base64 エンコードするくどさ」より悪いとは思わないと述べられています。</p>
+<blockquote>
+<p>I&#39;m not sure that the &quot;always base64&quot; crumminess is worse than the &quot;sometimes base64&quot; crumminess :)</p>
+</blockquote>
+<p>現在の API からわかる通り、最終的にはすべてのデータを base64 エンコードするという方針が採用されました。
+base64 エンコードしたりしなかったりして混乱するよりは、全て base64 する方向に統一する一貫性を選んだんでしょうね。</p>
+<h1>余談</h1>
+<p>後に ConfigMap にはバイナリを扱うための <code>binaryData</code> フィールドが追加されましたが、これは 2018年のことでした。</p>
+<p><a href="https://github.com/kubernetes/kubernetes/pull/57938">https://github.com/kubernetes/kubernetes/pull/57938</a></p>
+<p>個人的に、ConfigMap は Secret とは違って非機密データを扱うものですから、デフォルトでテキストデータを扱い、別の選択肢として <code>binaryData</code> が生えていることに違和感はありません。</p>
+</div>
+      </article>
+    </main>
+  </body>
+</html>

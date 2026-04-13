@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ABC044 D - 桁和 / Digit Sum (500点) | 9sako6</title>
+    <meta name="description" content="ABC044 Dの解説です。割り算が出たら平方根を考えるというのは典型っぽい" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>ABC044 D - 桁和 / Digit Sum (500点)</h1>
+        <blog-post-meta date="2020-02-16T03:14:00.000+09:00"></blog-post-meta>
+        <div class="content" data-render-math="true"><h1>問題</h1>
+<p><a href="https://atcoder.jp/contests/abc044/tasks/arc060_b">https://atcoder.jp/contests/abc044/tasks/arc060_b</a></p>
+<h1>考察</h1>
+<p>$n$,$s$に対して以下の変形ができます。</p>
+<p>$n = a_0b^0 + a_1b^1 + ... + a_mb^m$</p>
+<p>$s = a_0 + a_1 + ... + a_m$</p>
+<p>$b$が大きくなるほど$m$は小さくなります。
+なぜなら$m$は$n$を$b$で何回割れるかみたいなことを表す値だからです。</p>
+<p>$m = floor(\log_b n)$</p>
+<p>$b$と$m$の関係を追ってみます。</p>
+<ul>
+<li>$b \leq \sqrt{n}$のとき、$m \geq 2$</li>
+<li>$b &gt; \sqrt{n}$のとき、$m &lt; 2$</li>
+</ul>
+<p>$2 \leq b \leq \sqrt{n}$のとき、$O(\sqrt{n})$で$b$を全探索すれば良いです。</p>
+<p>以降、$b &gt; \sqrt{n}$の場合を考えます。このとき、</p>
+<p>$$
+\begin{array}{c}</p>
+<p>n = a_0 + a_1b , ...(1)\</p>
+<p>s = a_0 + a_1  , ...(2)</p>
+<p>\end{array}
+$$</p>
+<p>とかけます。$(1)$式から、$n = a_0 + a_1b \geq a_1b &gt; a_1 \sqrt{n}$より、$\sqrt{n} &gt; a_1$を得ます。</p>
+<p>また、$(1, 2)$式から、$b = (n - s) / a_1 + 1$です。</p>
+<p>よって、$\sqrt{n} &gt; a_1 \geq 1$となる$a_1$を全探索すれば$b$が求まります。</p>
+<p>ちなみに、$s &gt; n$を満たす$b$は無く、$s = n$を満たす$b$は$n+1$です。</p>
+<p><a href="https://atcoder.jp/contests/abc044/submissions/8314781">submission(Ruby)</a></p>
+<h1>学び</h1>
+<p>割り算が出たら$\sqrt{n}$を考えるというのは典型っぽい？
+今回の場合だと$b$を$\sqrt{n}$で場合分けすることによって探索が$O(\sqrt{n})$でできるようになりました。頭いい。</p>
+<h1>参考</h1>
+<ol>
+<li><a href="http://arc060.contest.atcoder.jp/data/arc/060/editorial.pdf">editorial.pdf</a></li>
+<li><a href="http://seica-at.hatenablog.com/entry/2017/12/29/132244">ARC060_D - 桁和 / Digit Sum - seica_atの日記</a></li>
+</ol>
+</div>
+      </article>
+    </main>
+  </body>
+</html>

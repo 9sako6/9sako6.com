@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ABC021 D - 多重ループ | 9sako6</title>
+    <meta name="description" content="ABC021 D - 多重ループの解説です。解くのに必要な重複組み合わせも説明します。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>ABC021 D - 多重ループ</h1>
+        <blog-post-meta date="2020-02-07T20:33:00.000+09:00"></blog-post-meta>
+        <div class="content" data-render-math="true"><h1>問題</h1>
+<p><a href="https://atcoder.jp/contests/abc021/tasks/abc021_d">https://atcoder.jp/contests/abc021/tasks/abc021_d</a></p>
+<h1>考察</h1>
+<p>問題を簡単にしてみます。$1 \leq a_1 &lt; a_2 &lt; ... &lt; a_k &lt; n$を満たす組み合わせを考えます。$1$以上$n$以下の整数を$k$個選び、全て異なる整数であれば上記の条件を満たすように並べることができます（「並べ替えれば条件を満たせる」系の考え方だと思って慣れる）。つまり、$1$以上$n$以下の整数を$k$個選ぶ組み合わせに等しいです 。これは${}_n C_k$です。</p>
+<p>本来は$1 \leq a_1 \leq a_2 \leq ... \leq a_k \leq n$でした。これは、$1$以上$n$以下の整数を<strong>重複を許して</strong>$k$個選ぶ組み合わせに等しいです。</p>
+<p>重複組み合わせを簡単に説明します。
+重複組み合わせを理解するには<strong>仕切りを使った考え方</strong>が重要です。</p>
+<blockquote>
+<p>桃太郎将軍は鬼退治のために軍隊を作りたいです。猿山、犬里、雉子ヶ谷にはそれぞれ、猿、犬、雉子が無限匹住んでいます。桃太郎将軍はこれらの土地から猿、犬、雉子を何匹かずつ雇って、軍隊を編成することにしました。しかし、きびだんごの在庫の問題で合計6匹までしか雇えません。桃太郎将軍は、軍隊を編成するメンバーの種類のパターンが何通りあるかを知りたいです。これを求めてください。ただし、雇わない種類が存在してもよいとします。</p>
+</blockquote>
+<p>3種類の動物がいるので、2つの仕切りを使ってメンバーを3グループに分けてみます。</p>
+<ul>
+<li>○○|○○|○○</li>
+<li>○○|○|○○○</li>
+<li>○|○○○○|○</li>
+<li>○○○○○||○</li>
+</ul>
+<p>例えば上記のような分け方があります。○で示したもののうち、左のグループから順に猿、犬、雉子になると決めます。</p>
+<ul>
+<li>猿猿|犬犬|鳥鳥</li>
+<li>猿猿|犬|鳥鳥鳥</li>
+<li>猿|犬犬犬犬|鳥</li>
+<li>猿猿猿猿猿||鳥</li>
+</ul>
+<p>この「6つの○」と「2つの|」の並べ方が求める場合の数に一致します。
+この場合の数は、まず8つの場所（「6つの○」と「2つの|」の合計）を用意しておき、仕切りの場所2つ（もしくは○の場所6つ）を選ぶ（選ばなかった場所には自動的にもう一方が入る）、として解け、答えは${}<em>{8} C</em>{2} = {}_{8} C_6 = 28$通りです。</p>
+<p>一般化すると、$n$種類から重複を許して$k$個選ぶ組み合わせは${}_{n-1+k} C_k$です。</p>
+<p>脱線したので元の問題に戻ると、$1$以上$n$以下の整数を$k$個選ぶ重複組み合わせは${}_{n-1+k} C_k$なので、これが答えです。</p>
+<p>ところで、この二項係数を求めるのにもひと工夫必要です。</p>
+<p>$$
+{}_n C_k = \frac{n!}{k!(n-k)!}
+$$</p>
+<p>なので、</p>
+<p>$k!^{-1}$ と $(n-k)!^{-1}$ が必要です。これを求めるにはフェルマーの小定理を使います。</p>
+<blockquote>
+<p>$p$ を素数、$a$ を $p$ の倍数でない整数として $a^{p-1} \equiv 1 (mod, p)$ が成立する。（<a href="https://qiita.com/drken/items/3b4fdf0a78e7a138cd9a">引用元</a>）</p>
+</blockquote>
+<p>よって、$a \times a^{p-2}\equiv 1 (mod, p)$ となるので、$a^{p-2}$ は $a$ の逆元です。　
+これは、繰り返し二乗法を用いて$O(\log p)$で求まります。</p>
+<p><a href="https://atcoder.jp/contests/abc021/submissions/8651510">https://atcoder.jp/contests/abc021/submissions/8651510</a></p>
+<p>なお、この問題では必要ないですが、複数の二項係数を高速で求めたい場面は多々あります。そんな時は逆元テーブル（$1!, 2!, ..., n!$の逆元）を予め求めておく必要があります。それぞれ求めると$O(n  \log p)$かかりますが、最初に$(n!)^{-1}$を$O(\log p)$で求め、$(n-1)!^{-1} = (n!)^{-1} \times n$であることを利用して後ろから計算していくと$O(n + \log p)$で求まります。</p>
+<p><a href="https://atcoder.jp/contests/abc021/submissions/8651936">https://atcoder.jp/contests/abc021/submissions/8651936</a></p>
+<h1>参考</h1>
+<ol>
+<li><a href="https://www.slideshare.net/chokudai/abc021">AtCoder Beginner Contest 021 解説</a></li>
+<li><a href="https://qiita.com/drken/items/3b4fdf0a78e7a138cd9a">「1000000007 で割ったあまり」の求め方を総特集！ 〜 逆元から離散対数まで 〜</a></li>
+</ol>
+</div>
+      </article>
+    </main>
+  </body>
+</html>

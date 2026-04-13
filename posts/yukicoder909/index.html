@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>yukicoder No.909 たぴの配置 (★2) | 9sako6</title>
+    <meta name="description" content="yukicoder No.909 たぴの配置 (★2)の解説" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>yukicoder No.909 たぴの配置 (★2)</h1>
+        <blog-post-meta date="2020-02-07T23:38:00.000+09:00"></blog-post-meta>
+        <div class="content" data-render-math="true"><h1>問題</h1>
+<p><a href="https://yukicoder.me/problems/no/909">https://yukicoder.me/problems/no/909</a></p>
+<h1>考察</h1>
+<p>求める最大距離は$d = \min_{1 \leq i \leq N}(X_i + Y_i)$です。</p>
+<p>これ以上大きな$d_{NG} &gt; \min_{1 \leq i \leq N}(X_i + Y_i)$にはできません。
+なぜなら、たぴ$0$とたぴ$N+1$を$d_{NG}$離して配置すると、例えば$\min_{1 \leq i \leq N}(X_i + Y_i)$をみたすたぴ$i_{min}$をどのように配置しても、たぴ$0$から$X_{i_{min}}$より大きく離れるか、たぴ$N+1$から$Y_{i_{min}}$より大きく離れるからです。</p>
+<p>一方、$d = \min_{1 \leq i \leq N}(X_i + Y_i)$は以下の構成で達成できます。</p>
+<p>たぴ$0$を$0$に配置します。
+たぴ$N+1$を$d$に配置します。</p>
+<p>たぴ$i (1 \leq i \leq N)$について、</p>
+<ul>
+<li><p>$d \leq X_i$のとき$d$に配置します。こうすればたぴ$0$から$X_i$以下であり、たぴ$N+1$からの距離は$0$なので$Y_i$も自然と満たされます。</p>
+</li>
+<li><p>$d &gt; X_i$のとき、$X_i$に配置します。このとき、たぴ$N+1$から$Y_i$以下という条件もみたしています。なぜなら、$X_i + Y_i \geq d$より、$Y_i \geq d - X_i$だからです。</p>
+</li>
+</ul>
+<p><a href="https://yukicoder.me/submissions/397044">https://yukicoder.me/submissions/397044</a></p>
+</div>
+      </article>
+    </main>
+  </body>
+</html>

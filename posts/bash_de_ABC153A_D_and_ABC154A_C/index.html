@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>bashでABC153 A~DとABC154 A~Cを解いた | 9sako6</title>
+    <meta name="description" content="ABC153 A~DとABC154 A~Cの計7問をbashで解きました。 解く中で得た知識を備忘録として残しておきます。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>bashでABC153 A~DとABC154 A~Cを解いた</h1>
+        <blog-post-meta date="2020-02-13T00:02:00.000+09:00"></blog-post-meta>
+        <div class="content" data-render-math="true"><p>ABC153 A-DとABC154 A-Cの計7問をbashで解きました。
+パズルみたいで面白かったです。
+解く中で得た知識を備忘録として残しておきます。</p>
+<p>まず、bashの基本知識を説明します。</p>
+<h1>bash基本知識</h1>
+<h2>入力の受け取り方</h2>
+<p>入力は<code>read</code>コマンドで受け取れます。</p>
+<pre><code class="language-bash">read n   
+read a b # スペース区切りの入力
+
+declare -a arr=()
+read arr # 配列で受け取る
+</code></pre>
+<p>一応、数列とかを配列で受け取ることもできます。
+でも、入力を配列にパースする処理や<code>for</code>文が遅いのでそもそも配列を使わない方向で考えた方が良さそうです。</p>
+<h2>変数につける括弧</h2>
+<p>変数に代入したいときや変数を展開したいときによく使う3つの括弧を雑に説明します。</p>
+<ul>
+<li><code>${}</code></li>
+<li><code>$()</code></li>
+<li><code>$(())</code></li>
+</ul>
+<h3><code>${}</code>: 変数を展開する</h3>
+<p>変数展開です。付けなくてもいいけど全ての変数に付けた方が変数とただの文字の区別がつくので良いです。</p>
+<pre><code class="language-bash">if [ ${n} != ${m} ]; then
+  echo &quot;NO&quot;
+else
+  echo &quot;YES&quot;
+fi
+</code></pre>
+<h3><code>$()</code>: <code>()</code>内でコマンドを実行した結果を値として得る</h3>
+<p><code>()</code>で括ったコマンドはサブシェルで実行されます。</p>
+<pre><code class="language-bash">m=$(tr &#39; &#39; &#39;\n&#39; | LANG=C sort -u | wc -l | tr -d &#39; &#39;)
+</code></pre>
+<h3><code>$(())</code>: <code>(())</code>内で数値計算した結果を値として得る</h3>
+<p><code>(( ))</code>内で数値計算できます。</p>
+<pre><code class="language-bash">echo $((1+1))                 # 2
+echo $(($(sed -e &#39;s/ /+/g&#39;))) # 空白区切りの文字列の空白を+に置換して計算する
+</code></pre>
+<h1>解いた問題たち</h1>
+<p><code>${}</code>は付けた方がいいと言いましたが全然付けてません。（えー</p>
+<h2>ABC153 A - Serval vs Monster</h2>
+<p><a href="https://atcoder.jp/contests/abc153/tasks/abc153_a">https://atcoder.jp/contests/abc153/tasks/abc153_a</a></p>
+<p>さっきの<code>$(())</code>を使います。</p>
+<pre><code class="language-bash">read h a
+echo $((($h+$a-1)/$a))
+</code></pre>
+<p>実は<code>(())</code>内では変数の<code>$</code>を省略できるので以下のコードでもいいです。</p>
+<pre><code class="language-bash">read h a
+echo $(((h+a-1)/a))
+</code></pre>
+<h2>ABC153 B - Common Raccoon vs Monster</h2>
+<p><a href="https://atcoder.jp/contests/abc153/tasks/abc153_b">https://atcoder.jp/contests/abc153/tasks/abc153_b</a></p>
+<p><code>sed</code>でスペースを+に置き換えてます。
+<code>sed</code>への渡し方ですが、変数なら<code>echo</code>、ファイルなら<code>cat</code>を使います。
+今回は<code>echo</code>です。</p>
+<pre><code class="language-bash">read h n
+read s
+a=$(($(echo $s | sed -e &#39;s/ /+/g&#39;)))
+if [ $h -le $a ]; then
+  echo Yes
+else
+  echo No
+fi
+</code></pre>
+<h2>ABC153 C - Fennec vs Monster</h2>
+<p><a href="https://atcoder.jp/contests/abc153/tasks/abc153_c">https://atcoder.jp/contests/abc153/tasks/abc153_c</a></p>
+<p>$H$を降順に並べて、$1$行目から$K$行目まで削除して、改行を+に置換した文字列を計算しています。</p>
+<pre><code class="language-bash">read n k
+if [ $k = 0 ]; then
+    echo $(($(sed -e &#39;s/ /+/g&#39;)))
+else
+    echo $(($(tr &#39; &#39; $&#39;\n&#39; | LANG=C sort -rn | sed -e &#39;1,&#39;${k}&#39;d&#39; | tr $&#39;\n&#39; &#39;+&#39;)0))
+fi
+</code></pre>
+<p><code>sort</code>するためには空白区切りの文字列を改行区切りにしておく必要があります。この置換は<code>tr</code>コマンドでやりました。<code>sort</code>に<code>-n</code>を付けると数値としてソートしてくれます。これを忘れてWAった。
+<code>LANG=C</code>は<code>sort</code>が速くなるおまじないです。</p>
+<p><code>sed</code>の条件内で変数を使う時は、シングルクオーテーションで囲みます。</p>
+<h2>ABC153 D - Caracal vs Monster</h2>
+<p><a href="https://atcoder.jp/contests/abc153/tasks/abc153_d">https://atcoder.jp/contests/abc153/tasks/abc153_d</a></p>
+<p><code>for</code>文の<code>(())</code>内は<code>$</code>を省略した変数を使っています。</p>
+<pre><code class="language-bash">read h
+n=0
+while [ $h -gt 0 ]; do
+  h=$(($h / 2))
+  n=$(($n + 1))
+done
+ans=0
+for((i=0;i&lt;n;i++));do
+  ans=$((ans + 2 ** i))
+done
+echo $ans
+</code></pre>
+<p>答えが全てのbitに1がたった数になることに気づければ、以下のコードでもいいです。</p>
+<pre><code class="language-bash">read h
+n=0
+while [ $h -gt 0 ]; do
+  h=$(($h / 2))
+  n=$(($n + 1))
+done
+echo $((2 ** n - 1))
+</code></pre>
+<h2>ABC154 A - Remaining Balls</h2>
+<p><a href="https://atcoder.jp/contests/abc154/tasks/abc154_a">https://atcoder.jp/contests/abc154/tasks/abc154_a</a></p>
+<pre><code class="language-bash">read s t
+read a b
+read u
+if [ $s = $u ]; then
+  echo &quot;$(($a-1)) $b&quot;
+else
+  echo &quot;$a $((b-1))&quot;
+fi
+</code></pre>
+<h2>ABC154 B - I miss you...</h2>
+<p><a href="https://atcoder.jp/contests/abc154/tasks/abc154_b">https://atcoder.jp/contests/abc154/tasks/abc154_b</a></p>
+<pre><code class="language-bash">sed -e &#39;s/./x/g&#39;
+</code></pre>
+<p>入力は標準入力から来るので別に変数に代入しなくてもいいのです。</p>
+<h2>ABC154 C - Distinct or Not</h2>
+<p><a href="https://atcoder.jp/contests/abc154/tasks/abc154_c">https://atcoder.jp/contests/abc154/tasks/abc154_c</a></p>
+<pre><code class="language-bash">read n
+declare -a a=()
+read a
+m=$(echo ${a[@]} | tr &#39; &#39; &#39;\n&#39; | sort | uniq | wc -l | tr -d &#39; &#39;)
+if [ $n != $m ]; then
+  echo &quot;NO&quot;
+else
+  echo &quot;YES&quot;
+fi
+</code></pre>
+<p><a href="https://atcoder.jp/contests/abc154/submissions/10062829">submission: 1030ms</a></p>
+<p>あ、冒頭で配列を受け取ると遅いと言いましたね。
+実際そのようで、配列を介さないようにしたら1030ms -&gt; 710msになりました。
+しれっと<code>sort | uniq</code>が<code>sort -u</code>になっていますがあまり速さには関係ありませんでした。</p>
+<pre><code class="language-bash">read n
+m=$(tr &#39; &#39; &#39;\n&#39; | LANG=C sort -u | wc -l | tr -d &#39; &#39;)
+if [ $n != $m ]; then
+  echo &quot;NO&quot;
+else
+  echo &quot;YES&quot;
+fi
+</code></pre>
+<p><a href="https://atcoder.jp/contests/abc154/submissions/10062916">submission: 710ms</a></p>
+<h1>最後に</h1>
+<p>bashって今後も廃れない言語だと思うので、鍛えておくと得しそうです。</p>
+<h1>参考</h1>
+<p><a href="http://fj.hatenablog.jp/entry/2016/03/06/170907">http://fj.hatenablog.jp/entry/2016/03/06/170907</a></p>
+</div>
+      </article>
+    </main>
+  </body>
+</html>

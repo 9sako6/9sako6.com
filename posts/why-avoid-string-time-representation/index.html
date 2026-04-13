@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>時刻の文字列表現を避けるべき理由と、避けられないシナリオ | 9sako6</title>
+    <meta name="description" content="Web アプリケーションの開発において、時刻を扱う際は時刻の型（例えば JavaScript の Date）を使うべきで、時刻を文字列で表現するのはなるべく避けるべきです。 しかしながら、時刻を文字列で表現しなければならないシナリオは存在します。大きく以下の 2 つです。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>時刻の文字列表現を避けるべき理由と、避けられないシナリオ</h1>
+        <blog-post-meta date="2023-12-25T19:15:37.625+09:00"></blog-post-meta>
+        <div class="content" data-render-math="true"><p>Web アプリケーションの開発において、時刻を扱う際は時刻の型（例えば JavaScript の <code>Date</code>）を使うべきで、時刻を文字列で表現するのはなるべく避けるべきです。
+しかしながら、時刻を文字列で表現しなければならないシナリオは存在します。大きく以下の 2 つです。</p>
+<ol>
+<li>時刻を人間に表示するとき・人間が入力するとき<ul>
+<li>例: ユーザーインターフェイス上でユーザーにわかりやすい形で時刻を表現したいとき</li>
+<li>例: ユーザーが、レストランを予約する時刻を入力するとき（実際の UI はカレンダーかもしれないが、システムは入力として文字列の時刻を受け取るだろう）</li>
+<li>例: システムのログを開発者のために文字列で表示するとき</li>
+<li>例: プログラムの中で、任意の時刻が何かしらの意味をもっていて、開発者に伝えたいとき（DB へのクエリとか、バッチの実行時刻とか、何らかの設定ファイルとか）</li>
+</ul>
+</li>
+<li>時刻を含むデータをシリアライズ・デシリアライズするとき<ul>
+<li>例: 日付を表現したフィールドを持つ JSON を扱うとき</li>
+</ul>
+</li>
+</ol>
+<p>逆に言えば、上記 2 つ以外の状況では時刻を文字列に変換するべきではないと筆者は考えています。</p>
+<h1>時刻を文字列表現せずに、計算効率と型安全性を保つ</h1>
+<p>時刻を文字列で表現すると、計算効率と型安全性が下がります。</p>
+<p>計算効率の観点でいうと、時刻の型であれば可能だった演算が、文字列ではできなくなります。例えば、時刻 A と時刻 B の間の時間を求めるのは時刻の型であれば簡単です。
+しかし、文字列で同じことをしようとすると、一度文字列を時刻の型に再変換して演算する必要があるでしょう。
+さらに、適切な文字列表現をしておかないと、時刻の型であれば本来もっていたはずの精度（例: タイムゾーン）が失われる可能性もあります。</p>
+<p>型安全性の観点でいうと、時刻の型に変換可能な文字列なのか、変換不可能な文字列なのかを型レベルで判別するのは難しいので問題が起こりやすくなります。
+先ほど例に挙げた時刻と時刻の間の時間を求める場合のように、文字列から時刻の型への変換は往々にして必要になります。
+しかしながら、文字列がどのようなフォーマットで渡されるのかを都度知っておかなければ、適切に変換することができません。
+プログラム中にある文字列が、時刻の型に変換可能な文字列なのか、変換不可能な文字列なのかを判断する必要があり、複雑性が増して事故の元です。</p>
+<h1>システム内部では絶対的な時刻を保持する</h1>
+<p>おさらいすると、時刻を文字列表現しなければならないシナリオは「1. 時刻を人間に表示するとき・人間が入力するとき」、「2. 時刻を含むデータをシリアライズ・デシリアライズするとき」でした。
+これらのシナリオにおいて、絶対的な時刻とタイムゾーンの両方が揃っていれば、時刻を適切に文字列に変換することが可能になります。</p>
+<p>「絶対的な時刻」とは、タイムゾーンに依存しない、特定の時刻を指して本記事で使っている言葉です。
+Unix time がその一例で、東京であろうとロンドンであろうと、世界中で一貫した値を示します。
+このようなグローバルな時刻基準は、異なる地域やシステム間での時刻の一貫性を保証します。</p>
+<p>タイムゾーンに関しては、時刻を文字列で表現する際にのみ考慮すれば十分です。
+時刻データ自体にタイムゾーンを含める必要はありません。
+絶対的な時刻を基準とすることで、システム内部では時刻を文字列に変換する必要が軽減され、時刻関連の演算はすべて時刻の型を用いて行うことができます。
+これにより、計算の効率と精度を高めることが可能になります。</p>
+<p>実際にどのような絶対的な時刻でデータを保持するかは、扱うデータストアによって変わるでしょう。
+例えば筆者は、PostgreSQL では TIMESTAMP で時刻を保持し、Firestore では Timestamp 型で時刻を保持しています。</p>
+<p>ただし、プロジェクトの需要によっては UTC からのオフセットも保存しておく選択もありえます。</p>
+<p><a href="https://www.m3tech.blog/entry/timezone-handling">https://www.m3tech.blog/entry/timezone-handling</a></p>
+<h1>開発者向けに時刻を文字列で表現する際は、ISO-8601 の拡張形式を使う</h1>
+<p>プログラム内において、JSON を使う場合のようにどうしても時刻を文字列で持たなければならない場合は、ISO-8601 の拡張形式を使うのがよいでしょう。
+広く Web の各種業界で標準になっています。（JavaScript の <code>Date.prototype.toISOString()</code> メソッドで得られるのも ISO-8601 の拡張形式）</p>
+<h1>まとめ</h1>
+<p>時刻を文字列で表現する必要があるのは、主に人間とのインタラクションやデータのシリアライズ・デシリアライズの際です。
+それ以外の場合では、時刻を文字列で表現せずに、時刻の型を保持し、計算効率と型安全性を維持することが重要です。</p>
+</div>
+      </article>
+    </main>
+  </body>
+</html>

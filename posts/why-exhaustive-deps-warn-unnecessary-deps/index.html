@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>なぜ不変なオブジェクトを useEffect, useCallback, useMemo の依存配列に含めるのか: react-hooks/exhaustive-deps のフェイルセーフ | 9sako6</title>
+    <meta name="description" content="ESLint の react hooks/exhaustive deps ルールを使っているときにフェイルセーフの大切さを見出す場面があったので書き記しておきます。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/blog.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+    <script defer src="/src/components/blog-math.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <blog-nav></blog-nav>
+      <article>
+        <h1>なぜ不変なオブジェクトを useEffect, useCallback, useMemo の依存配列に含めるのか: react-hooks/exhaustive-deps のフェイルセーフ</h1>
+        <blog-post-meta date="2024-01-14T00:55:00.000Z"></blog-post-meta>
+        <div class="content" data-render-math="true"><p>ESLint の <code>react-hooks/exhaustive-deps</code> ルールを使っているときにフェイルセーフの大切さを見出す場面があったので書き記しておきます。</p>
+<h1>不変のオブジェクトは依存配列に含める必要がない</h1>
+<p>ESLint で<code>react-hooks/exhaustive-deps</code> ルールを有効にすると、<code>useEffect</code> や <code>useCallback</code> 、<code>useMemo</code> といったフックの依存配列に漏れがある場合に検知してくれます。</p>
+<p>ただし、これらのフックの依存先に不変のオブジェクトがあるとき、不変のオブジェクトを依存配列に含める必要はありません。
+例えば、以下の <code>useCallback</code> では <code>setCount</code> を使っていますが、<code>setCount</code>（<code>useState</code> が返す set 関数）は再レンダリング間で不変<sup><a id="footnote-ref-1" href="#footnote-1" data-footnote-ref aria-describedby="footnote-label">[1]</a></sup>なので依存配列に含める必要はありません。
+そして <code>react-hooks/exhaustive-deps</code> は賢いので、この場合は依存配列に含めてなくても怒られません。</p>
+<pre><code class="language-tsx">const [count, setCount] = useState(0);
+const handleClick = useCallback(() =&gt; {
+  setCount((prev) =&gt; prev + 1);
+}, []); // Lint に怒られない
+</code></pre>
+<h1>不変でも検知してフェイルセーフにしてくれる</h1>
+<p>次は、不要なはずの不変オブジェクトを依存配列に含めるように言われる例を見てみましょう。
+set 関数をカスタムフックから返すと、set 関数は不変なはずですが依存配列に含めるように言われます。</p>
+<pre><code class="language-tsx">// 現実にこんなコードはあってほしくないですが、認知負荷を下げるために簡単な例を出しています。
+const useCount = () =&gt; {
+  const [count, setCount] = useState(0);
+  return [count, setCount] as const;
+};
+
+export const Counter = () =&gt; {
+  const [count, setCount] = useCount();
+  const handleClick = useCallback(() =&gt; {
+    setCount((prev) =&gt; prev + 1);
+  }, []);
+</code></pre>
+<pre><code class="language-bash">/Users/9sako6/demo/Counter.tsx
+  14:6  error  React Hook useCallback has a missing dependency: &#39;setCount&#39;. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+</code></pre>
+<p>技術的に依存配列に含める必要がないオブジェクトを、依存配列に含めるように言われてしまいました。
+想像に難くないですが、カスタムフックやコンテキストで不変オブジェクトを渡された場合、流石に Linter はそれを検知できるほどの力を持っていないでしょう。
+加えて、本当に不変オブジェクトであるならば、依存配列に含まれていたって動作には何の問題もありません。
+例に挙げた <code>useCallback</code> は依存配列の要素に変更があったときにキャッシュではなく新しい関数を返すようになるわけで、不変オブジェクトが依存配列に含まれていたところで変更とは見なされないので害はありません。
+<code>react-hooks/exhaustive-deps</code> はなるべく依存配列への記入漏れを検知することにより、コードが安全になるようにしてくれているわけですね。</p>
+<h1>最後に</h1>
+<p>フェイルセーフってとっても大事ですね。
+React を使う際はぜひ <code>react-hooks/exhaustive-deps</code> ルールを有効にしましょう。</p>
+<h1>検証環境</h1>
+<ul>
+<li><a href="mailto:eslint-plugin-react-hooks@4.6.0">eslint-plugin-react-hooks@4.6.0</a></li>
+<li><a href="mailto:eslint-plugin-react@7.33.2">eslint-plugin-react@7.33.2</a></li>
+<li><a href="mailto:eslint@8.56.0">eslint@8.56.0</a></li>
+<li><a href="mailto:react-dom@18.2.0">react-dom@18.2.0</a></li>
+<li><a href="mailto:react@18.2.0">react@18.2.0</a></li>
+</ul>
+<h1>参考</h1>
+<p><a href="https://github.com/facebook/react/issues/14920#issuecomment-471070149">https://github.com/facebook/react/issues/14920#issuecomment-471070149</a></p>
+
+<blog-footnotes>
+<h2 id="footnote-label" class="sr-only">Footnotes</h2>
+<ol>
+<li id="footnote-1">期限切れとなった古い方のドキュメントには書いてあった。<a href="https://legacy.reactjs.org/docs/hooks-reference.html">https://legacy.reactjs.org/docs/hooks-reference.html</a> &gt; React guarantees that setState function identity is stable and won’t change on re-renders. This is why it’s safe to omit from the useEffect or useCallback dependency list. / 現在も不変であることを確かめる場合は、コンポーネントの外で <code>let lastSetState</code> を定義して <code>setState</code> をレンダリングのたびに保存しておいて、<code>lastSetState === setState</code> をするといいでしょう <a href="#footnote-ref-1" data-footnote-backref aria-label="Back to reference 1">↩</a></li>
+</ol>
+</blog-footnotes>
+</div>
+      </article>
+    </main>
+  </body>
+</html>
