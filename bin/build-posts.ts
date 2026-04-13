@@ -79,7 +79,7 @@ marked.use({
         })
         .join("\n");
 
-      return `${htmlWithMath}\n<blog-footnotes>\n<h2 id="footnote-label" class="sr-only">Footnotes</h2>\n<ol>\n${items}\n</ol>\n</blog-footnotes>\n`;
+      return `${htmlWithMath}\n<section class="footnotes" aria-labelledby="footnote-label">\n<h2 id="footnote-label" class="sr-only">Footnotes</h2>\n<ol>\n${items}\n</ol>\n</section>\n`;
     }
   },
   extensions: [
@@ -128,7 +128,7 @@ marked.use({
         }
       },
       renderer(token) {
-        return `<blog-message>${this.parser.parse(token.tokens!)}</blog-message>`;
+        return `<aside class="message">${this.parser.parse(token.tokens!)}</aside>`;
       }
     }
   ]
@@ -155,7 +155,7 @@ const outputDir = join(rootDir, "dist");
 const outputPostsDir = join(outputDir, "posts");
 const outputImagesDir = join(outputDir, "images");
 const redirectsPath = join(outputDir, "_redirects");
-const staticEntries = ["404.html", "about", "favicon.ico", "index.html", "src"] as const;
+const staticEntries = ["404.html", "about", "favicon.ico", "index.html"] as const;
 const categoryOrder = ["Technology", "Competitive Programming", "Random"] as const;
 
 function escapeHtml(value: string): string {
@@ -164,6 +164,10 @@ function escapeHtml(value: string): string {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+}
+
+function containsMath(markdown: string): boolean {
+  return /(^|\n)\$\$[\s\S]*?\$\$(?=\n|$)|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\]|\$(?!\s)[^$\n]+?(?<!\s)\$/m.test(markdown);
 }
 
 function readPublishedPosts(): PublishedPost[] {
@@ -240,15 +244,10 @@ function layout(
     <meta property="og:type" content="${escapeHtml(ogType)}" />
     <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
     <meta name="twitter:card" content="summary" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
-    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     ${mathHead}
-    <script type="module" src="/src/register-web-components.js"></script>
   </head>
   <body>
     ${body}
@@ -262,18 +261,20 @@ function buildIndexPage(posts: PublishedPost[]): string {
     .map((section) => {
       const items = section.posts
         .map(
-          (post) => `<blog-post-entry>
+          (post) => `<li class="post-entry">
             <a href="/posts/${post.slug}/">${escapeHtml(post.meta.title)}</a>
             <time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time>
             <p>${escapeHtml(post.summary)}</p>
-          </blog-post-entry>`
+          </li>`
         )
         .join("\n");
 
-      return `<blog-posts-section>
-        <h2 slot="heading">${escapeHtml(section.title)}</h2>
-        ${items}
-      </blog-posts-section>`;
+      return `<section class="post-index-section" aria-labelledby="category-${escapeHtml(section.id)}">
+        <h2 id="category-${escapeHtml(section.id)}">${escapeHtml(section.title)}</h2>
+        <ul class="post-list">
+          ${items}
+        </ul>
+      </section>`;
     })
     .join("\n");
 
@@ -281,10 +282,14 @@ function buildIndexPage(posts: PublishedPost[]): string {
     "Posts | 9sako6",
     "公開済みのブログ記事一覧です。",
     `<main>
-      <blog-nav><a href="/posts/">Blog</a></blog-nav>
+      <nav class="blog-nav" aria-label="ブログ">
+        <a href="/posts/">Blog</a>
+      </nav>
       <h1 class="sr-only">ブログ記事一覧</h1>
       ${sections}
-      <blog-back-link><a href="/">← トップへ</a></blog-back-link>
+      <nav class="back-link">
+        <a href="/">← トップへ</a>
+      </nav>
     </main>`,
     { pathname: "/posts/", ogType: "website" }
   );
@@ -292,21 +297,26 @@ function buildIndexPage(posts: PublishedPost[]): string {
 
 function buildPostPage(post: PublishedPost): string {
   const html = marked.parse(post.body, { gfm: true }) as string;
+  const includeMath = containsMath(post.body);
 
   return layout(
     `${post.meta.title} | 9sako6`,
     post.meta.description || post.summary,
     `<main>
-      <blog-nav><a href="/posts/">Blog</a></blog-nav>
+      <nav class="blog-nav" aria-label="ブログ">
+        <a href="/posts/">Blog</a>
+      </nav>
       <article>
         <h1>${escapeHtml(post.meta.title)}</h1>
-        <blog-post-meta><time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time></blog-post-meta>
-        <div class="content" data-render-math="true">${html}</div>
+        <p class="post-meta"><time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time></p>
+        <div class="content"${includeMath ? ' data-render-math="true"' : ""}>${html}</div>
       </article>
-      <blog-divider></blog-divider>
-      <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
+      <hr class="blog-divider" />
+      <nav class="back-link">
+        <a href="/posts/">← 記事一覧へ</a>
+      </nav>
     </main>`,
-    { includeMath: true, pathname: `/posts/${post.slug}/`, ogType: "article" }
+    { includeMath, pathname: `/posts/${post.slug}/`, ogType: "article" }
   );
 }
 
@@ -321,9 +331,14 @@ function cleanOutput() {
 
 function copyStaticEntries() {
   for (const entry of staticEntries) {
-    const sourceBaseDir = entry === "src" ? rootDir : staticDir;
-    cpSync(join(sourceBaseDir, entry), join(outputDir, entry), { recursive: true });
+    cpSync(join(staticDir, entry), join(outputDir, entry), { recursive: true });
   }
+
+  mkdirSync(join(outputDir, "src", "styles"), { recursive: true });
+  mkdirSync(join(outputDir, "src", "behaviors"), { recursive: true });
+  cpSync(join(rootDir, "src", "styles", "site-shell.css"), join(outputDir, "src", "styles", "site-shell.css"));
+  cpSync(join(rootDir, "src", "styles", "blog.css"), join(outputDir, "src", "styles", "blog.css"));
+  cpSync(join(rootDir, "src", "behaviors", "render-math.js"), join(outputDir, "src", "behaviors", "render-math.js"));
 }
 
 function copyReferencedImages(posts: PublishedPost[]) {

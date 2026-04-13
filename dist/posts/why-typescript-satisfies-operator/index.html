@@ -12,27 +12,20 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://9sako6.com/posts/why-typescript-satisfies-operator/" />
     <meta name="twitter:card" content="summary" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
-    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
-    <script defer src="/src/behaviors/render-math.js"></script>
-    <script type="module" src="/src/register-web-components.js"></script>
   </head>
   <body>
     <main>
-      <blog-nav><a href="/posts/">Blog</a></blog-nav>
+      <nav class="blog-nav" aria-label="ブログ">
+        <a href="/posts/">Blog</a>
+      </nav>
       <article>
         <h1>TypeScript の satisfies 演算子は何に役立つのか</h1>
-        <blog-post-meta><time datetime="2023-07-01T16:38:44.902+09:00">2023年7月1日</time></blog-post-meta>
-        <div class="content" data-render-math="true"><h1><code>satisfies</code> 演算子とは</h1>
+        <p class="post-meta"><time datetime="2023-07-01T16:38:44.902+09:00">2023年7月1日</time></p>
+        <div class="content"><h1><code>satisfies</code> 演算子とは</h1>
 <p><a href="https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#the-satisfies-operator">TypeScript 4.9 で導入された</a> <code>satisfies</code> 演算子は、<code>式 satisfies 型</code> のようにして使い、式 が 型にマッチするかどうかをチェックします。</p>
 <p><code>satisfies</code> は、</p>
 <ul>
@@ -172,8 +165,10 @@ await db
 <p><a href="https://github.com/microsoft/TypeScript/issues/47920">https://github.com/microsoft/TypeScript/issues/47920</a></p>
 </div>
       </article>
-      <blog-divider></blog-divider>
-      <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
+      <hr class="blog-divider" />
+      <nav class="back-link">
+        <a href="/posts/">← 記事一覧へ</a>
+      </nav>
     </main>
   </body>
 </html>

@@ -12,27 +12,20 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://9sako6.com/posts/why-not-how/" />
     <meta name="twitter:card" content="summary" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
-    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
-    <script defer src="/src/behaviors/render-math.js"></script>
-    <script type="module" src="/src/register-web-components.js"></script>
   </head>
   <body>
     <main>
-      <blog-nav><a href="/posts/">Blog</a></blog-nav>
+      <nav class="blog-nav" aria-label="ブログ">
+        <a href="/posts/">Blog</a>
+      </nav>
       <article>
         <h1>なぜ &quot;How&quot; の記事を書きたくないか</h1>
-        <blog-post-meta><time datetime="2024-01-21T12:40:49.960Z">2024年1月21日</time></blog-post-meta>
-        <div class="content" data-render-math="true"><p>私はこのブログで、&quot;How&quot; よりも &quot;Why&quot; に焦点を当てた内容を書くことに努めています。
+        <p class="post-meta"><time datetime="2024-01-21T12:40:49.960Z">2024年1月21日</time></p>
+        <div class="content"><p>私はこのブログで、&quot;How&quot; よりも &quot;Why&quot; に焦点を当てた内容を書くことに努めています。
 道具の使い方や技術紹介ではなく、それらが、なぜその形で在るのか、どんな問題を解決するために存在するのかを考えたいと思っています。</p>
 <p><a href="https://9sako6.com/about/">当ブログの紹介ページ</a>では、アジャイルソフトウェア開発宣言をオマージュした「ブログ執筆宣言」を掲げています。</p>
 <blockquote>
@@ -46,11 +39,13 @@
 <p>過去に私は Zenn や Qiita で多くの「いいね」を獲得した &quot;How&quot; の記事を執筆したことがありますが、技術の進化により、その内容は時代遅れとなってしまいました。&quot;How&quot; には消費期限があります。</p>
 <p>しかし、&quot;Why&quot; の記事は長い間存在感を放ちます。私たちが巨人の肩の上に乗っている限り、技術の未来はその延長上で発展します。なぜ技術がそう在るのかという理由は、時間が経過しても変わらないのです。</p>
 <p>そのような長持ちする記事を書くことは、私にやりがいをもたらします。消費期限が来たらお役御免になるか、全てを書き直さなければならない記事とは違って、長くメンテナンスすることで熟成され、磨かれ、より価値のある記事に育つからです。</p>
-<blog-message><p>世の中にある &quot;How&quot; の記事を批判するつもりは毛頭ありません。むしろ普段から助けられているので感謝しています。あくまで私のこのブログでは、&quot;Why&quot; に重きを置きたい。</p>
-</blog-message></div>
+<aside class="message"><p>世の中にある &quot;How&quot; の記事を批判するつもりは毛頭ありません。むしろ普段から助けられているので感謝しています。あくまで私のこのブログでは、&quot;Why&quot; に重きを置きたい。</p>
+</aside></div>
       </article>
-      <blog-divider></blog-divider>
-      <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
+      <hr class="blog-divider" />
+      <nav class="back-link">
+        <a href="/posts/">← 記事一覧へ</a>
+      </nav>
     </main>
   </body>
 </html>

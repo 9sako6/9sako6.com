@@ -45,6 +45,24 @@ a {
   text-underline-offset: 0.18em;
 }
 
+.blog-nav {
+  margin-bottom: 2.5rem;
+}
+
+.back-link {
+  margin-top: 6rem;
+  font-size: 0.9em;
+}
+
+.back-link a {
+  color: var(--muted);
+  text-decoration-thickness: 0.06em;
+}
+
+.back-link a:hover {
+  color: var(--link);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -55,6 +73,52 @@ a {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+.post-index-section + .post-index-section {
+  margin-top: 3.25rem;
+}
+
+.post-list {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.post-entry {
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.post-entry a {
+  color: var(--link-entry);
+  font-size: 1.08rem;
+  text-decoration: none;
+}
+
+.post-entry a:hover {
+  color: var(--link-entry-hover);
+}
+
+.post-entry time,
+.post-meta {
+  display: block;
+  margin-top: 0.7rem;
+  color: var(--muted);
+}
+
+.post-entry p {
+  margin: 0.8rem 0 0;
+  max-width: 34rem;
+  color: var(--muted);
+}
+
+.blog-divider {
+  width: 9rem;
+  margin: 4rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
 }
 
 .content {
@@ -114,6 +178,32 @@ a {
   margin-bottom: 0;
 }
 
+.content .message {
+  margin: 1.75rem 0;
+  padding: 1rem 1.1rem;
+  background: var(--message-bg);
+  border-radius: 6px;
+  line-height: 1.8;
+}
+
+.content .message > :first-child {
+  margin-top: 0;
+}
+
+.content .message > :last-child {
+  margin-bottom: 0;
+}
+
+.footnotes {
+  margin-top: 3rem;
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.footnotes ol {
+  padding-left: 1.5rem;
+}
+
 [data-footnote-ref] {
   margin-left: 0.25em;
   color: var(--footnote-link);
@@ -130,4 +220,9 @@ a {
   color: var(--footnote-link);
 }
 
+@media (max-width: 640px) {
+  .post-entry a {
+    font-size: 1rem;
+  }
+}
 

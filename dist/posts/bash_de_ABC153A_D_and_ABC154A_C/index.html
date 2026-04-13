@@ -12,11 +12,7 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://9sako6.com/posts/bash_de_ABC153A_D_and_ABC154A_C/" />
     <meta name="twitter:card" content="summary" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
-    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     
@@ -24,14 +20,15 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
     <script defer src="/src/behaviors/render-math.js"></script>
-    <script type="module" src="/src/register-web-components.js"></script>
   </head>
   <body>
     <main>
-      <blog-nav><a href="/posts/">Blog</a></blog-nav>
+      <nav class="blog-nav" aria-label="ブログ">
+        <a href="/posts/">Blog</a>
+      </nav>
       <article>
         <h1>bashでABC153 A~DとABC154 A~Cを解いた</h1>
-        <blog-post-meta><time datetime="2020-02-13T00:02:00.000+09:00">2020年2月13日</time></blog-post-meta>
+        <p class="post-meta"><time datetime="2020-02-13T00:02:00.000+09:00">2020年2月13日</time></p>
         <div class="content" data-render-math="true"><p>ABC153 A-DとABC154 A-Cの計7問をbashで解きました。
 パズルみたいで面白かったです。
 解く中で得た知識を備忘録として残しておきます。</p>
@@ -181,8 +178,10 @@ fi
 <p><a href="http://fj.hatenablog.jp/entry/2016/03/06/170907">http://fj.hatenablog.jp/entry/2016/03/06/170907</a></p>
 </div>
       </article>
-      <blog-divider></blog-divider>
-      <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
+      <hr class="blog-divider" />
+      <nav class="back-link">
+        <a href="/posts/">← 記事一覧へ</a>
+      </nav>
     </main>
   </body>
 </html>

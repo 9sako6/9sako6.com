@@ -30,7 +30,7 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.85 "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font: 16px/1.85 "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
 }
 
 main {

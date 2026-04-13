@@ -12,27 +12,20 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://9sako6.com/posts/why-hard-to-talk-to/" />
     <meta name="twitter:card" content="summary" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
-    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
-    <script defer src="/src/behaviors/render-math.js"></script>
-    <script type="module" src="/src/register-web-components.js"></script>
   </head>
   <body>
     <main>
-      <blog-nav><a href="/posts/">Blog</a></blog-nav>
+      <nav class="blog-nav" aria-label="ブログ">
+        <a href="/posts/">Blog</a>
+      </nav>
       <article>
         <h1>なんで人と話しにくいんだっけ、傾向と対策</h1>
-        <blog-post-meta><time datetime="2023-12-31T12:42:00.000+09:00">2023年12月31日</time></blog-post-meta>
-        <div class="content" data-render-math="true"><p>私は「コミュニケーションが苦手」だと思っていたけどそうでもないらしいです。
+        <p class="post-meta"><time datetime="2023-12-31T12:42:00.000+09:00">2023年12月31日</time></p>
+        <div class="content"><p>私は「コミュニケーションが苦手」だと思っていたけどそうでもないらしいです。
 周りの方々からは、コミュニケーションは取れているし、話すこともできているというフィードバックをいただきます。</p>
 <p>しかし、人と話すのは緊張するし、MP を消費して疲れるのであまり好きではありません。
 プライベートでも仕事でも、周りは良い人ばかりなのに、話す場において自分で自分を疲れさせている感覚がありました。</p>
@@ -127,8 +120,10 @@
 新しい傾向と対策が見つかったら追記していきます。</p>
 </div>
       </article>
-      <blog-divider></blog-divider>
-      <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
+      <hr class="blog-divider" />
+      <nav class="back-link">
+        <a href="/posts/">← 記事一覧へ</a>
+      </nav>
     </main>
   </body>
 </html>
