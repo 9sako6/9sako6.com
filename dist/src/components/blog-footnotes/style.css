@@ -1,0 +1,6 @@
+:host {
+  display: block;
+  margin-top: 3rem;
+  color: var(--muted);
+  font-size: 0.9em;
+}

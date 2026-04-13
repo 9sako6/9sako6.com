@@ -113,11 +113,14 @@ type CategorySection = {
 
 const rootDir = fileURLToPath(new URL("../", import.meta.url));
 const contentDir = join(rootDir, "content", "blog");
+const staticDir = join(rootDir, "static");
 const sourcePostsDir = join(contentDir, "posts");
 const sourceImagesDir = join(contentDir, "public", "images");
-const outputPostsDir = join(rootDir, "posts");
-const outputImagesDir = join(rootDir, "images");
-const redirectsPath = join(rootDir, "_redirects");
+const outputDir = join(rootDir, "dist");
+const outputPostsDir = join(outputDir, "posts");
+const outputImagesDir = join(outputDir, "images");
+const redirectsPath = join(outputDir, "_redirects");
+const staticEntries = ["404.html", "about", "favicon.ico", "index.html", "src"] as const;
 const categoryOrder = ["Technology", "Competitive Programming", "Random"] as const;
 
 function escapeHtml(value: string): string {
@@ -254,10 +257,19 @@ function buildPostPage(post: PublishedPost): string {
 }
 
 function cleanOutput() {
+  rmSync(outputDir, { recursive: true, force: true });
+  mkdirSync(outputDir, { recursive: true });
   rmSync(outputPostsDir, { recursive: true, force: true });
   rmSync(outputImagesDir, { recursive: true, force: true });
   mkdirSync(outputPostsDir, { recursive: true });
   mkdirSync(outputImagesDir, { recursive: true });
+}
+
+function copyStaticEntries() {
+  for (const entry of staticEntries) {
+    const sourceBaseDir = entry === "src" ? rootDir : staticDir;
+    cpSync(join(sourceBaseDir, entry), join(outputDir, entry), { recursive: true });
+  }
 }
 
 function copyReferencedImages(posts: PublishedPost[]) {
@@ -311,6 +323,7 @@ function writeRedirects(posts: PublishedPost[]) {
 function main() {
   const posts = readPublishedPosts();
   cleanOutput();
+  copyStaticEntries();
   writePosts(posts);
   copyReferencedImages(posts);
   writeRedirects(posts);

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>9sako6</title>
+    <meta
+      name="description"
+      content="Webアプリケーションの開発をしている9sako6のプロフィールページです。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap"
+    />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <style>
+      body {
+        padding: 60px 24px 56px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4.5vw, 2.45rem);
+        font-weight: 500;
+        line-height: 1.24;
+        letter-spacing: 0.01em;
+        color: var(--link);
+      }
+
+      h2 {
+        margin: 3rem 0 0;
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .lead {
+        margin-top: 1rem;
+        color: var(--muted);
+        max-width: 26rem;
+      }
+
+      nav {
+        margin-top: 2rem;
+      }
+
+      ul {
+        margin: 1rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      li + li {
+        margin-top: 0.65rem;
+      }
+
+      .links li {
+        margin-top: 0;
+      }
+
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem 1.25rem;
+      }
+
+      a {
+        color: var(--link);
+        text-decoration: underline;
+        text-decoration-thickness: 0.08em;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover {
+        color: #ebe5da;
+      }
+
+      .name-reading {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.08em;
+      }
+
+      .career-item {
+        padding: 0.1rem 0 0.9rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .career-item:last-child {
+        border-bottom: 0;
+      }
+
+      .period {
+        display: block;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .place {
+        display: block;
+        margin-top: 0.2rem;
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 40px 20px 48px;
+        }
+
+        h1 {
+          font-size: clamp(1.85rem, 10vw, 2.25rem);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1 id="site-title">9sako6</h1>
+      <p class="name-reading">くさころ</p>
+      <p class="lead">Webアプリケーションの開発をしている9sako6です。</p>
+
+      <nav aria-label="プロフィールリンク">
+        <ul class="links">
+          <li><a href="/posts/">Blog</a></li>
+          <li><a href="https://x.com/9sako6" target="_blank">X</a></li>
+          <li><a href="https://github.com/9sako6" target="_blank">GitHub</a></li>
+        </ul>
+      </nav>
+
+      <section aria-labelledby="career-heading">
+        <h2 id="career-heading">経歴</h2>
+        <ul>
+          <li class="career-item">
+            <span class="period">2025/06 - 現在</span>
+            <span class="place">株式会社ドワンゴ</span>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

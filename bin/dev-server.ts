@@ -1,6 +1,6 @@
 import { join, normalize } from "node:path";
 
-const rootDir = import.meta.dir + "/..";
+const rootDir = join(import.meta.dir, "..", "dist");
 const port = Number(process.env.PORT ?? "3000");
 
 function toFilePath(url: URL): { path: string; redirect?: string } {
