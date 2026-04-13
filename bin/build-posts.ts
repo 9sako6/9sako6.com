@@ -226,6 +226,7 @@ function buildIndexPage(posts: PublishedPost[]): string {
       <blog-nav></blog-nav>
       <h1 class="sr-only">ブログ記事一覧</h1>
       ${sections}
+      <blog-back-link href="/">← トップへ</blog-back-link>
     </main>`
   );
 }
@@ -243,6 +244,8 @@ function buildPostPage(post: PublishedPost): string {
         <blog-post-meta date="${escapeHtml(post.meta.date)}"></blog-post-meta>
         <div class="content" data-render-math="true">${html}</div>
       </article>
+      <blog-divider></blog-divider>
+      <blog-back-link href="/posts/">← 記事一覧へ</blog-back-link>
     </main>`
     ,
     { includeMath: true }

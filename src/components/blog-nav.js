@@ -6,10 +6,6 @@ template.innerHTML = `
       margin-bottom: 2.5rem;
     }
 
-    nav {
-      color: var(--muted, #aaa294);
-    }
-
     a {
       color: var(--link, #e5ded1);
       text-decoration-thickness: 0.08em;
@@ -22,8 +18,6 @@ template.innerHTML = `
     }
   </style>
   <nav aria-label="ブログ">
-    <a href="/">9sako6</a>
-    <span aria-hidden="true"> / </span>
     <a href="/posts/">Blog</a>
   </nav>
 `;
