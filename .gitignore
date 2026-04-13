@@ -1,42 +1,15 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-tmp
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-public/rss.xml
-public/og-images/
-
-# production
-/build
-
-# misc
 .DS_Store
-*.pem
+.idea/
+.vscode/
 
-# debug
+tmp/
+
+*.log
 npm-debug.log*
 
-# local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-
-# secret
 .env
+.env.*
+*.local
+*.pem
+*.key
+*.swp
