@@ -1,3 +1,0 @@
-[submodule "content/blog"]
-	path = content/blog
-	url = ssh://git@github.com/9sako6/blog.git
