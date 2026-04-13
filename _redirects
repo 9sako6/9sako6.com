@@ -1,4 +1,5 @@
 /posts /posts/ 308
+/about /about/ 308
 /posts/why-not-how /posts/why-not-how/ 308
 /posts/why-exhaustive-deps-warn-unnecessary-deps /posts/why-exhaustive-deps-warn-unnecessary-deps/ 308
 /posts/why-kubernetes-secret-base64-encoded /posts/why-kubernetes-secret-base64-encoded/ 308
@@ -17,6 +18,7 @@
 
 / /index.html 200
 /favicon.ico /favicon.ico 200
+/about/* /about/:splat 200
 /posts/* /posts/:splat 200
 /images/* /images/:splat 200
 /src/* /src/:splat 200

@@ -291,10 +291,12 @@ function writeRedirects(posts: PublishedPost[]) {
 
   const lines = [
     "/posts /posts/ 308",
+    "/about /about/ 308",
     ...postRedirects,
     "",
     "/ /index.html 200",
     "/favicon.ico /favicon.ico 200",
+    "/about/* /about/:splat 200",
     "/posts/* /posts/:splat 200",
     "/images/* /images/:splat 200",
     "/src/* /src/:splat 200",

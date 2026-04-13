@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About | 9sako6</title>
+    <meta name="description" content="9sako6のブログ執筆宣言。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <script type="module" src="/src/components/index.js"></script>
+    <style>
+      body {
+        padding: 60px 24px 56px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.6rem, 3.6vw, 1.9rem);
+        font-weight: 500;
+        line-height: 1.28;
+        color: var(--link);
+      }
+
+      p {
+        margin: 1.5rem 0 0;
+        line-height: 1.9;
+      }
+
+      .verse {
+        margin: 2rem 0 0;
+        padding-left: 1rem;
+        border-left: 1px solid var(--line);
+        color: var(--link);
+        font-size: 1.05em;
+        line-height: 2;
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 40px 20px 48px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>ブログ執筆宣言</h1>
+      <p>
+        私は、記事の執筆を通じて、より深い理解と洞察を得ることを目指しています。私は以下の価値に至りました。
+      </p>
+      <p class="verse">
+        「どうやって」よりも「なぜ」を、<br />
+        「解決方法」よりも「問題設定」を、
+      </p>
+      <p>
+        価値とします。すなわち、技術の扱い方が重要であることを認めながらも、私はその技術が存在する理由や背後にある問題設定により大きな価値をおきます。
+      </p>
+      <blog-back-link href="/">← トップへ</blog-back-link>
+    </main>
+  </body>
+</html>
