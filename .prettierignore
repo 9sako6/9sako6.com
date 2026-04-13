@@ -1,6 +1,0 @@
-.next
-out
-posts/*.md
-data
-playwright-report
-src/components/features/contents/about.mdx
