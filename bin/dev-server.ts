@@ -1,6 +1,6 @@
-import { join, normalize } from "node:path";
+import { join, normalize, resolve } from "node:path";
 
-const rootDir = join(import.meta.dir, "..", "dist");
+const rootDir = resolve(process.cwd(), "dist");
 const port = Number(process.env.PORT ?? "3000");
 
 function toFilePath(url: URL): { path: string; redirect?: string } {
@@ -35,6 +35,11 @@ Bun.serve({
 
     if (await file.exists()) {
       return new Response(file);
+    }
+
+    const notFoundFile = Bun.file(join(rootDir, "404.html"));
+    if (await notFoundFile.exists()) {
+      return new Response(notFoundFile, { status: 404 });
     }
 
     return new Response("Not Found", { status: 404 });

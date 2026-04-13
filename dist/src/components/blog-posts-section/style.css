@@ -6,7 +6,8 @@
   margin-top: 3.25rem;
 }
 
-h2 {
+::slotted([slot="heading"]) {
+  display: block;
   margin: 0;
   font-size: 1rem;
   font-weight: 500;

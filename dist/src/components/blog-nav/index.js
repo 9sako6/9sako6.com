@@ -1,4 +1,4 @@
-import shared from "../shared.css" with { type: "css" };
+import shared from "../../styles/component-shared.css" with { type: "css" };
 import styles from "./style.css" with { type: "css" };
 
 const template = document.createElement("template");

@@ -11,6 +11,32 @@ const footnoteState = {
   depth: 0
 };
 
+const mathBlockState = {
+  blocks: [] as string[]
+};
+
+const siteUrl = "https://9sako6.com";
+
+function protectMathBlocks(markdown: string): string {
+  const replaceBlock = (source: string, pattern: RegExp) =>
+    source.replace(pattern, (_match: string, leading: string, content: string) => {
+      const index = mathBlockState.blocks.push(content.trim()) - 1;
+      return `${leading}<div data-katex-block="${index}"></div>\n`;
+    });
+
+  return replaceBlock(
+    replaceBlock(markdown, /(^|\n)\$\$([\s\S]*?)\$\$(?=\n|$)/g),
+    /(^|\n)\\\[([\s\S]*?)\\\](?=\n|$)/g
+  );
+}
+
+function restoreMathBlocks(html: string): string {
+  return html.replace(/<div data-katex-block="(\d+)"><\/div>/g, (_match, index: string) => {
+    const source = mathBlockState.blocks[Number(index)] ?? "";
+    return `<div data-katex-display="${escapeHtml(encodeURIComponent(source))}"></div>`;
+  });
+}
+
 marked.use({
   hooks: {
     preprocess(markdown: string) {
@@ -21,19 +47,28 @@ marked.use({
 
       footnoteState.defs.clear();
       footnoteState.refs.length = 0;
+      mathBlockState.blocks.length = 0;
 
-      return markdown.replace(
+      const withoutFootnotes = markdown.replace(
         /^\[\^([^\]\n]+)\]:[ \t]*([^\n]*(?:\n[ \t]+[^\n]*)*)/gm,
         (_match, label: string, content: string) => {
           footnoteState.defs.set(label, content.replace(/\n[ \t]+/g, "\n").trim());
           return "";
         }
       );
+
+      return protectMathBlocks(withoutFootnotes);
     },
     postprocess(html: string) {
       footnoteState.depth--;
-      if (footnoteState.depth !== 0 || footnoteState.refs.length === 0) {
+      if (footnoteState.depth !== 0) {
         return html;
+      }
+
+      const htmlWithMath = restoreMathBlocks(html);
+
+      if (footnoteState.refs.length === 0) {
+        return htmlWithMath;
       }
 
       const items = footnoteState.refs
@@ -44,7 +79,7 @@ marked.use({
         })
         .join("\n");
 
-      return `${html}\n<blog-footnotes>\n<h2 id="footnote-label" class="sr-only">Footnotes</h2>\n<ol>\n${items}\n</ol>\n</blog-footnotes>\n`;
+      return `${htmlWithMath}\n<blog-footnotes>\n<h2 id="footnote-label" class="sr-only">Footnotes</h2>\n<ol>\n${items}\n</ol>\n</blog-footnotes>\n`;
     }
   },
   extensions: [
@@ -161,7 +196,11 @@ function groupPostsByCategory(posts: PublishedPost[]): CategorySection[] {
     grouped.set(category, current);
   }
 
-  return categoryOrder
+  const extraCategories = [...grouped.keys()]
+    .filter((key) => !categoryOrder.includes(key as (typeof categoryOrder)[number]))
+    .sort((left, right) => left.localeCompare(right));
+
+  return [...categoryOrder, ...extraCategories]
     .map((key) => ({
       id: key.toLowerCase().replaceAll(" ", "-"),
       key,
@@ -171,14 +210,21 @@ function groupPostsByCategory(posts: PublishedPost[]): CategorySection[] {
     .filter((section) => section.posts.length > 0);
 }
 
-function layout(title: string, description: string, body: string, options?: { includeMath?: boolean }): string {
+function layout(
+  title: string,
+  description: string,
+  body: string,
+  options?: { includeMath?: boolean; pathname?: string; ogType?: "website" | "article" }
+): string {
   const mathHead = options?.includeMath
     ? `
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
-    <script defer src="/src/components/blog-math.js"></script>`
+    <script defer src="/src/behaviors/render-math.js"></script>`
     : "";
+  const canonicalUrl = new URL(options?.pathname ?? "/", siteUrl).toString();
+  const ogType = options?.ogType ?? "website";
 
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -187,6 +233,13 @@ function layout(title: string, description: string, body: string, options?: { in
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}" />
+    <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
+    <meta property="og:site_name" content="9sako6" />
+    <meta property="og:title" content="${escapeHtml(title)}" />
+    <meta property="og:description" content="${escapeHtml(description)}" />
+    <meta property="og:type" content="${escapeHtml(ogType)}" />
+    <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
+    <meta name="twitter:card" content="summary" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
@@ -195,7 +248,7 @@ function layout(title: string, description: string, body: string, options?: { in
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     ${mathHead}
-    <script type="module" src="/src/components/index.js"></script>
+    <script type="module" src="/src/register-web-components.js"></script>
   </head>
   <body>
     ${body}
@@ -217,7 +270,8 @@ function buildIndexPage(posts: PublishedPost[]): string {
         )
         .join("\n");
 
-      return `<blog-posts-section heading="${escapeHtml(section.title)}">
+      return `<blog-posts-section>
+        <h2 slot="heading">${escapeHtml(section.title)}</h2>
         ${items}
       </blog-posts-section>`;
     })
@@ -231,7 +285,8 @@ function buildIndexPage(posts: PublishedPost[]): string {
       <h1 class="sr-only">ブログ記事一覧</h1>
       ${sections}
       <blog-back-link><a href="/">← トップへ</a></blog-back-link>
-    </main>`
+    </main>`,
+    { pathname: "/posts/", ogType: "website" }
   );
 }
 
@@ -250,9 +305,8 @@ function buildPostPage(post: PublishedPost): string {
       </article>
       <blog-divider></blog-divider>
       <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
-    </main>`
-    ,
-    { includeMath: true }
+    </main>`,
+    { includeMath: true, pathname: `/posts/${post.slug}/`, ogType: "article" }
   );
 }
 

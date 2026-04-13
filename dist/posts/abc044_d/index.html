@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ABC044 D - 桁和 / Digit Sum (500点) | 9sako6</title>
     <meta name="description" content="ABC044 Dの解説です。割り算が出たら平方根を考えるというのは典型っぽい" />
+    <link rel="canonical" href="https://9sako6.com/posts/abc044_d/" />
+    <meta property="og:site_name" content="9sako6" />
+    <meta property="og:title" content="ABC044 D - 桁和 / Digit Sum (500点) | 9sako6" />
+    <meta property="og:description" content="ABC044 Dの解説です。割り算が出たら平方根を考えるというのは典型っぽい" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://9sako6.com/posts/abc044_d/" />
+    <meta name="twitter:card" content="summary" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
@@ -16,8 +23,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
-    <script defer src="/src/components/blog-math.js"></script>
-    <script type="module" src="/src/components/index.js"></script>
+    <script defer src="/src/behaviors/render-math.js"></script>
+    <script type="module" src="/src/register-web-components.js"></script>
   </head>
   <body>
     <main>
@@ -41,12 +48,9 @@
 </ul>
 <p>$2 \leq b \leq \sqrt{n}$のとき、$O(\sqrt{n})$で$b$を全探索すれば良いです。</p>
 <p>以降、$b &gt; \sqrt{n}$の場合を考えます。このとき、</p>
-<p>$$
-\begin{array}{c}</p>
-<p>n = a_0 + a_1b , ...(1)\</p>
-<p>s = a_0 + a_1  , ...(2)</p>
-<p>\end{array}
-$$</p>
+<div data-katex-display="%5Cbegin%7Barray%7D%7Bc%7D%0A%0An%20%3D%20a_0%20%2B%20a_1b%20%5C%2C%20...(1)%5C%5C%0A%0As%20%3D%20a_0%20%2B%20a_1%20%20%5C%2C%20...(2)%0A%0A%5Cend%7Barray%7D"></div>
+
+
 <p>とかけます。$(1)$式から、$n = a_0 + a_1b \geq a_1b &gt; a_1 \sqrt{n}$より、$\sqrt{n} &gt; a_1$を得ます。</p>
 <p>また、$(1, 2)$式から、$b = (n - s) / a_1 + 1$です。</p>
 <p>よって、$\sqrt{n} &gt; a_1 \geq 1$となる$a_1$を全探索すれば$b$が求まります。</p>

@@ -28,10 +28,6 @@
   min-width: 0;
 }
 
-.body ::slotted(*:first-child) {
-  margin-top: 0;
-}
-
-.body ::slotted(*:last-child) {
-  margin-bottom: 0;
+.body ::slotted(*) {
+  margin-block: 0;
 }

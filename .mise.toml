@@ -19,4 +19,5 @@ run = "bun run generate"
 
 [tasks.dev]
 description = "Generate the site and serve it locally with Bun"
-run = "bun run generate && bun run dev"
+depends = ["generate"]
+run = "bun run dev"

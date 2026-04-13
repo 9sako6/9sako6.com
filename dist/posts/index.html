@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Posts | 9sako6</title>
     <meta name="description" content="公開済みのブログ記事一覧です。" />
+    <link rel="canonical" href="https://9sako6.com/posts/" />
+    <meta property="og:site_name" content="9sako6" />
+    <meta property="og:title" content="Posts | 9sako6" />
+    <meta property="og:description" content="公開済みのブログ記事一覧です。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://9sako6.com/posts/" />
+    <meta name="twitter:card" content="summary" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
@@ -13,13 +20,14 @@
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     
-    <script type="module" src="/src/components/index.js"></script>
+    <script type="module" src="/src/register-web-components.js"></script>
   </head>
   <body>
     <main>
       <blog-nav><a href="/posts/">Blog</a></blog-nav>
       <h1 class="sr-only">ブログ記事一覧</h1>
-      <blog-posts-section heading="Technology">
+      <blog-posts-section>
+        <h2 slot="heading">Technology</h2>
         <blog-post-entry>
             <a href="/posts/why-exhaustive-deps-warn-unnecessary-deps/">なぜ不変なオブジェクトを useEffect, useCallback, useMemo の依存配列に含めるのか: react-hooks/exhaustive-deps のフェイルセーフ</a>
             <time datetime="2024-01-14T00:55:00.000Z">2024年1月14日</time>
@@ -41,7 +49,8 @@
             <p>TypeScript 4.9 で導入された satisfies 演算子は、式 satisfies 型 のようにして使い、式 が 型にマッチするかどうかをチェックします。</p>
           </blog-post-entry>
       </blog-posts-section>
-<blog-posts-section heading="Competitive Programming">
+<blog-posts-section>
+        <h2 slot="heading">Competitive Programming</h2>
         <blog-post-entry>
             <a href="/posts/define_int_long_long/">#define int long longは何がいけないのか</a>
             <time datetime="2020-04-07T23:35:00.000+09:00">2020年4月7日</time>
@@ -73,7 +82,8 @@
             <p>https://atcoder.jp/contests/abc021/tasks/abc021 d</p>
           </blog-post-entry>
       </blog-posts-section>
-<blog-posts-section heading="Random">
+<blog-posts-section>
+        <h2 slot="heading">Random</h2>
         <blog-post-entry>
             <a href="/posts/why-not-how/">なぜ &quot;How&quot; の記事を書きたくないか</a>
             <time datetime="2024-01-21T12:40:49.960Z">2024年1月21日</time>
