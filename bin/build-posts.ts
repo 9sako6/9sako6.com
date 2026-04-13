@@ -284,14 +284,22 @@ function writePosts(posts: PublishedPost[]) {
 }
 
 function writeRedirects(posts: PublishedPost[]) {
-  const postRedirects = posts
-    .map((post) => `/posts/${post.slug} /posts/${post.slug}/ 308`)
-    .join("\n");
+  const postRedirects = posts.map((post) => `/posts/${post.slug} /posts/${post.slug}/ 308`);
 
-  writeFileSync(
-    redirectsPath,
-    ["/posts /posts/ 308", postRedirects, "/* / 200"].filter(Boolean).join("\n") + "\n"
-  );
+  const lines = [
+    "/posts /posts/ 308",
+    ...postRedirects,
+    "",
+    "/ /index.html 200",
+    "/favicon.ico /favicon.ico 200",
+    "/posts/* /posts/:splat 200",
+    "/images/* /images/:splat 200",
+    "/src/* /src/:splat 200",
+    "",
+    "/* /404.html 404!"
+  ];
+
+  writeFileSync(redirectsPath, lines.join("\n") + "\n");
 }
 
 function main() {

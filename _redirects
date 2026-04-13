@@ -14,4 +14,11 @@
 /posts/bash_de_ABC153A_D_and_ABC154A_C /posts/bash_de_ABC153A_D_and_ABC154A_C/ 308
 /posts/yukicoder909 /posts/yukicoder909/ 308
 /posts/abc021_d /posts/abc021_d/ 308
-/* / 200
+
+/ /index.html 200
+/favicon.ico /favicon.ico 200
+/posts/* /posts/:splat 200
+/images/* /images/:splat 200
+/src/* /src/:splat 200
+
+/* /404.html 404!
