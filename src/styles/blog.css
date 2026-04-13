@@ -94,7 +94,10 @@ a {
 .post-entry a {
   color: var(--link-entry);
   font-size: 1.08rem;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.14em;
+  text-decoration-color: color-mix(in srgb, var(--link-entry) 45%, transparent);
 }
 
 .post-entry a:hover {
@@ -225,4 +228,3 @@ a {
     font-size: 1rem;
   }
 }
-

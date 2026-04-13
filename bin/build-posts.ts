@@ -38,6 +38,17 @@ function restoreMathBlocks(html: string): string {
 }
 
 marked.use({
+  renderer: {
+    image(token) {
+      const href = token.href?.split("?")[0] ?? "";
+      const dimensions = currentImageDimensions[href];
+      const title = token.title ? ` title="${escapeHtml(token.title)}"` : "";
+      const width = dimensions ? ` width="${dimensions.width}"` : "";
+      const height = dimensions ? ` height="${dimensions.height}"` : "";
+
+      return `<img src="${escapeHtml(token.href ?? "")}" alt="${escapeHtml(token.text)}"${title}${width}${height} />`;
+    }
+  },
   hooks: {
     preprocess(markdown: string) {
       footnoteState.depth++;
@@ -137,6 +148,7 @@ marked.use({
 type PublishedPost = ReturnType<typeof parsePostFile> & {
   summary: string;
   localImages: string[];
+  imageDimensions: Record<string, ImageDimensions>;
 };
 
 type CategorySection = {
@@ -144,6 +156,11 @@ type CategorySection = {
   key: string;
   title: string;
   posts: PublishedPost[];
+};
+
+type ImageDimensions = {
+  width: number;
+  height: number;
 };
 
 const rootDir = fileURLToPath(new URL("../", import.meta.url));
@@ -157,6 +174,9 @@ const outputImagesDir = join(outputDir, "images");
 const redirectsPath = join(outputDir, "_redirects");
 const staticEntries = ["404.html", "about", "favicon.ico", "index.html"] as const;
 const categoryOrder = ["Technology", "Competitive Programming", "Random"] as const;
+const inlineSiteShellCss = readFileSync(join(rootDir, "src", "styles", "site-shell.css"), "utf8");
+const inlineBlogCss = readFileSync(join(rootDir, "src", "styles", "blog.css"), "utf8");
+let currentImageDimensions: Record<string, ImageDimensions> = {};
 
 function escapeHtml(value: string): string {
   return value
@@ -170,21 +190,127 @@ function containsMath(markdown: string): boolean {
   return /(^|\n)\$\$[\s\S]*?\$\$(?=\n|$)|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\]|\$(?!\s)[^$\n]+?(?<!\s)\$/m.test(markdown);
 }
 
+function readPngDimensions(buffer: Buffer): ImageDimensions | null {
+  if (buffer.length < 24 || buffer.toString("ascii", 1, 4) !== "PNG") {
+    return null;
+  }
+
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20)
+  };
+}
+
+function readJpegDimensions(buffer: Buffer): ImageDimensions | null {
+  if (buffer.length < 4 || buffer[0] !== 0xff || buffer[1] !== 0xd8) {
+    return null;
+  }
+
+  let offset = 2;
+  while (offset + 9 < buffer.length) {
+    if (buffer[offset] !== 0xff) {
+      offset++;
+      continue;
+    }
+
+    const marker = buffer[offset + 1];
+    offset += 2;
+
+    if (marker === 0xd8 || marker === 0xd9) {
+      continue;
+    }
+
+    const size = buffer.readUInt16BE(offset);
+    if (size < 2 || offset + size > buffer.length) {
+      break;
+    }
+
+    if (
+      (marker >= 0xc0 && marker <= 0xc3) ||
+      (marker >= 0xc5 && marker <= 0xc7) ||
+      (marker >= 0xc9 && marker <= 0xcb) ||
+      (marker >= 0xcd && marker <= 0xcf)
+    ) {
+      return {
+        width: buffer.readUInt16BE(offset + 5),
+        height: buffer.readUInt16BE(offset + 3)
+      };
+    }
+
+    offset += size;
+  }
+
+  return null;
+}
+
+function readWebpDimensions(buffer: Buffer): ImageDimensions | null {
+  if (buffer.length < 30 || buffer.toString("ascii", 0, 4) !== "RIFF" || buffer.toString("ascii", 8, 12) !== "WEBP") {
+    return null;
+  }
+
+  const chunkType = buffer.toString("ascii", 12, 16);
+  if (chunkType === "VP8 ") {
+    return {
+      width: buffer.readUInt16LE(26) & 0x3fff,
+      height: buffer.readUInt16LE(28) & 0x3fff
+    };
+  }
+
+  if (chunkType === "VP8L") {
+    const b0 = buffer[21];
+    const b1 = buffer[22];
+    const b2 = buffer[23];
+    const b3 = buffer[24];
+    return {
+      width: 1 + (((b1 & 0x3f) << 8) | b0),
+      height: 1 + (((b3 & 0x0f) << 10) | (b2 << 2) | ((b1 & 0xc0) >> 6))
+    };
+  }
+
+  if (chunkType === "VP8X") {
+    return {
+      width: 1 + buffer[24] + (buffer[25] << 8) + (buffer[26] << 16),
+      height: 1 + buffer[27] + (buffer[28] << 8) + (buffer[29] << 16)
+    };
+  }
+
+  return null;
+}
+
+function readImageDimensions(path: string): ImageDimensions | null {
+  const buffer = readFileSync(path);
+  return readPngDimensions(buffer) ?? readJpegDimensions(buffer) ?? readWebpDimensions(buffer);
+}
+
+function collectImageDimensions(paths: string[]): Record<string, ImageDimensions> {
+  return Object.fromEntries(
+    paths.flatMap((imagePath) => {
+      const relativePath = imagePath.replace(/^\/images\//, "");
+      const dimensions = readImageDimensions(join(sourceImagesDir, relativePath));
+      return dimensions ? [[imagePath, dimensions]] : [];
+    })
+  );
+}
+
 function readPublishedPosts(): PublishedPost[] {
   const entries = readdirSync(sourcePostsDir)
     .filter((name) => name.endsWith(".md"))
     .map((name) => {
       const path = join(sourcePostsDir, name);
       const raw = readFileSync(path, "utf8");
-      const parsed = parsePostFile(path, raw);
-
-      return {
-        ...parsed,
-        summary: extractSummary(parsed.body, parsed.meta.title),
-        localImages: collectLocalImagePaths(parsed.body)
-      };
+      return parsePostFile(path, raw);
     })
     .filter((post) => post.meta.published)
+    .map((post) => {
+      const localImages = collectLocalImagePaths(post.body);
+
+      return {
+        ...post,
+        summary: extractSummary(post.body, post.meta.title),
+        localImages,
+        imageDimensions: collectImageDimensions(localImages)
+      };
+    })
     .sort((left, right) => right.meta.date.localeCompare(left.meta.date));
 
   return entries;
@@ -244,9 +370,9 @@ function layout(
     <meta property="og:type" content="${escapeHtml(ogType)}" />
     <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
     <meta name="twitter:card" content="summary" />
-    <link rel="stylesheet" href="/src/styles/site-shell.css" />
-    <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <style>${inlineSiteShellCss}
+${inlineBlogCss}</style>
     ${mathHead}
   </head>
   <body>
@@ -296,8 +422,10 @@ function buildIndexPage(posts: PublishedPost[]): string {
 }
 
 function buildPostPage(post: PublishedPost): string {
+  currentImageDimensions = post.imageDimensions;
   const html = marked.parse(post.body, { gfm: true }) as string;
   const includeMath = containsMath(post.body);
+  currentImageDimensions = {};
 
   return layout(
     `${post.meta.title} | 9sako6`,
