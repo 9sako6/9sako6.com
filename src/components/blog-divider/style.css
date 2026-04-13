@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  margin-top: 4rem;
+}
+
+hr {
+  width: 9rem;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}

@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
 import { collectLocalImagePaths, extractSummary, parsePostFile } from "./blog-content";
+import { formatPostDate } from "./format-date";
 
 const footnoteState = {
   defs: new Map<string, string>(),
@@ -187,6 +188,7 @@ function layout(title: string, description: string, body: string, options?: { in
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     ${mathHead}
@@ -204,12 +206,11 @@ function buildIndexPage(posts: PublishedPost[]): string {
     .map((section) => {
       const items = section.posts
         .map(
-          (post) => `<blog-post-entry
-            href="/posts/${post.slug}/"
-            title="${escapeHtml(post.meta.title)}"
-            date="${escapeHtml(post.meta.date)}"
-            summary="${escapeHtml(post.summary)}"
-          ></blog-post-entry>`
+          (post) => `<blog-post-entry>
+            <a href="/posts/${post.slug}/">${escapeHtml(post.meta.title)}</a>
+            <time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time>
+            <p>${escapeHtml(post.summary)}</p>
+          </blog-post-entry>`
         )
         .join("\n");
 
@@ -223,10 +224,10 @@ function buildIndexPage(posts: PublishedPost[]): string {
     "Posts | 9sako6",
     "公開済みのブログ記事一覧です。",
     `<main>
-      <blog-nav></blog-nav>
+      <blog-nav><a href="/posts/">Blog</a></blog-nav>
       <h1 class="sr-only">ブログ記事一覧</h1>
       ${sections}
-      <blog-back-link href="/">← トップへ</blog-back-link>
+      <blog-back-link><a href="/">← トップへ</a></blog-back-link>
     </main>`
   );
 }
@@ -238,14 +239,14 @@ function buildPostPage(post: PublishedPost): string {
     `${post.meta.title} | 9sako6`,
     post.meta.description || post.summary,
     `<main>
-      <blog-nav></blog-nav>
+      <blog-nav><a href="/posts/">Blog</a></blog-nav>
       <article>
         <h1>${escapeHtml(post.meta.title)}</h1>
-        <blog-post-meta date="${escapeHtml(post.meta.date)}"></blog-post-meta>
+        <blog-post-meta><time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time></blog-post-meta>
         <div class="content" data-render-math="true">${html}</div>
       </article>
       <blog-divider></blog-divider>
-      <blog-back-link href="/posts/">← 記事一覧へ</blog-back-link>
+      <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
     </main>`
     ,
     { includeMath: true }

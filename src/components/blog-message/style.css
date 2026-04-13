@@ -1,0 +1,37 @@
+:host {
+  display: flex;
+  gap: 0.7rem;
+  margin: 1.75rem 0;
+  padding: 1rem 1.1rem;
+  background: var(--message-bg);
+  border-radius: 6px;
+  line-height: 1.8;
+}
+
+.symbol {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-top: 0.2rem;
+  border-radius: 50%;
+  background: var(--message-badge-bg);
+  color: var(--message-badge-fg);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.body {
+  min-width: 0;
+}
+
+.body ::slotted(*:first-child) {
+  margin-top: 0;
+}
+
+.body ::slotted(*:last-child) {
+  margin-bottom: 0;
+}

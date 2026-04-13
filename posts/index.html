@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     
@@ -16,105 +17,90 @@
   </head>
   <body>
     <main>
-      <blog-nav></blog-nav>
+      <blog-nav><a href="/posts/">Blog</a></blog-nav>
       <h1 class="sr-only">ブログ記事一覧</h1>
       <blog-posts-section heading="Technology">
-        <blog-post-entry
-            href="/posts/why-exhaustive-deps-warn-unnecessary-deps/"
-            title="なぜ不変なオブジェクトを useEffect, useCallback, useMemo の依存配列に含めるのか: react-hooks/exhaustive-deps のフェイルセーフ"
-            date="2024-01-14T00:55:00.000Z"
-            summary="ESLint の react hooks/exhaustive deps ルールを使っているときにフェイルセーフの大切さを見出す場面があったので書き記しておきます。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/why-kubernetes-secret-base64-encoded/"
-            title="なぜ Kubernetes の Secret は base64 エンコードするのか"
-            date="2024-01-07T13:15:00.000Z"
-            summary="テキストデータだけでなく、バイナリデータも扱いたいからだと思われます。 base64 エンコードすればどんなデータでも文字列にすることができるので、例えばバイナリデータを扱うこともできます。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/why-avoid-string-time-representation/"
-            title="時刻の文字列表現を避けるべき理由と、避けられないシナリオ"
-            date="2023-12-25T19:15:37.625+09:00"
-            summary="Web アプリケーションの開発において、時刻を扱う際は時刻の型（例えば JavaScript の Date）を使うべきで、時刻を文字列で表現するのはなるべく避けるべきです。 しかしながら、時刻を文字列で表現しなければならないシナリオは存在します。大きく以下の 2 つです。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/why-typescript-satisfies-operator/"
-            title="TypeScript の satisfies 演算子は何に役立つのか"
-            date="2023-07-01T16:38:44.902+09:00"
-            summary="TypeScript 4.9 で導入された satisfies 演算子は、式 satisfies 型 のようにして使い、式 が 型にマッチするかどうかをチェックします。"
-          ></blog-post-entry>
+        <blog-post-entry>
+            <a href="/posts/why-exhaustive-deps-warn-unnecessary-deps/">なぜ不変なオブジェクトを useEffect, useCallback, useMemo の依存配列に含めるのか: react-hooks/exhaustive-deps のフェイルセーフ</a>
+            <time datetime="2024-01-14T00:55:00.000Z">2024年1月14日</time>
+            <p>ESLint の react hooks/exhaustive deps ルールを使っているときにフェイルセーフの大切さを見出す場面があったので書き記しておきます。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/why-kubernetes-secret-base64-encoded/">なぜ Kubernetes の Secret は base64 エンコードするのか</a>
+            <time datetime="2024-01-07T13:15:00.000Z">2024年1月7日</time>
+            <p>テキストデータだけでなく、バイナリデータも扱いたいからだと思われます。 base64 エンコードすればどんなデータでも文字列にすることができるので、例えばバイナリデータを扱うこともできます。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/why-avoid-string-time-representation/">時刻の文字列表現を避けるべき理由と、避けられないシナリオ</a>
+            <time datetime="2023-12-25T19:15:37.625+09:00">2023年12月25日</time>
+            <p>Web アプリケーションの開発において、時刻を扱う際は時刻の型（例えば JavaScript の Date）を使うべきで、時刻を文字列で表現するのはなるべく避けるべきです。 しかしながら、時刻を文字列で表現しなければならないシナリオは存在します。大きく以下の 2 つです。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/why-typescript-satisfies-operator/">TypeScript の satisfies 演算子は何に役立つのか</a>
+            <time datetime="2023-07-01T16:38:44.902+09:00">2023年7月1日</time>
+            <p>TypeScript 4.9 で導入された satisfies 演算子は、式 satisfies 型 のようにして使い、式 が 型にマッチするかどうかをチェックします。</p>
+          </blog-post-entry>
       </blog-posts-section>
 <blog-posts-section heading="Competitive Programming">
-        <blog-post-entry
-            href="/posts/define_int_long_long/"
-            title="#define int long longは何がいけないのか"
-            date="2020-04-07T23:35:00.000+09:00"
-            summary="C++で競技プログラミングをしていると目にする define int long long。 これをするとある程度はオーバーフローを気にしなくて良くなる反面、main関数の戻り値の型をintにする工夫をしないといけなくなったり、見た目はint型の変数でprintf(&quot;%lld&quot;, hoge);しないといけなくなったりします。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/abc113_d/"
-            title="ABC113 D - Number of Amidakuji (400点)"
-            date="2020-02-16T03:30:00.000+09:00"
-            summary="優秀なフレンズの助言をもらいながらACできたので、忘れないうちに記事にします。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/abc044_d/"
-            title="ABC044 D - 桁和 / Digit Sum (500点)"
-            date="2020-02-16T03:14:00.000+09:00"
-            summary="https://atcoder.jp/contests/abc044/tasks/arc060 b"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/bash_de_ABC153A_D_and_ABC154A_C/"
-            title="bashでABC153 A~DとABC154 A~Cを解いた"
-            date="2020-02-13T00:02:00.000+09:00"
-            summary="ABC153 A DとABC154 A Cの計7問をbashで解きました。 パズルみたいで面白かったです。 解く中で得た知識を備忘録として残しておきます。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/yukicoder909/"
-            title="yukicoder No.909 たぴの配置 (★2)"
-            date="2020-02-07T23:38:00.000+09:00"
-            summary="https://yukicoder.me/problems/no/909"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/abc021_d/"
-            title="ABC021 D - 多重ループ"
-            date="2020-02-07T20:33:00.000+09:00"
-            summary="https://atcoder.jp/contests/abc021/tasks/abc021 d"
-          ></blog-post-entry>
+        <blog-post-entry>
+            <a href="/posts/define_int_long_long/">#define int long longは何がいけないのか</a>
+            <time datetime="2020-04-07T23:35:00.000+09:00">2020年4月7日</time>
+            <p>C++で競技プログラミングをしていると目にする define int long long。 これをするとある程度はオーバーフローを気にしなくて良くなる反面、main関数の戻り値の型をintにする工夫をしないといけなくなったり、見た目はint型の変数でprintf(&quot;%lld&quot;, hoge);しないといけなくなったりします。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/abc113_d/">ABC113 D - Number of Amidakuji (400点)</a>
+            <time datetime="2020-02-16T03:30:00.000+09:00">2020年2月16日</time>
+            <p>優秀なフレンズの助言をもらいながらACできたので、忘れないうちに記事にします。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/abc044_d/">ABC044 D - 桁和 / Digit Sum (500点)</a>
+            <time datetime="2020-02-16T03:14:00.000+09:00">2020年2月16日</time>
+            <p>https://atcoder.jp/contests/abc044/tasks/arc060 b</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/bash_de_ABC153A_D_and_ABC154A_C/">bashでABC153 A~DとABC154 A~Cを解いた</a>
+            <time datetime="2020-02-13T00:02:00.000+09:00">2020年2月13日</time>
+            <p>ABC153 A DとABC154 A Cの計7問をbashで解きました。 パズルみたいで面白かったです。 解く中で得た知識を備忘録として残しておきます。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/yukicoder909/">yukicoder No.909 たぴの配置 (★2)</a>
+            <time datetime="2020-02-07T23:38:00.000+09:00">2020年2月7日</time>
+            <p>https://yukicoder.me/problems/no/909</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/abc021_d/">ABC021 D - 多重ループ</a>
+            <time datetime="2020-02-07T20:33:00.000+09:00">2020年2月7日</time>
+            <p>https://atcoder.jp/contests/abc021/tasks/abc021 d</p>
+          </blog-post-entry>
       </blog-posts-section>
 <blog-posts-section heading="Random">
-        <blog-post-entry
-            href="/posts/why-not-how/"
-            title="なぜ &quot;How&quot; の記事を書きたくないか"
-            date="2024-01-21T12:40:49.960Z"
-            summary="私はこのブログで、&quot;How&quot; よりも &quot;Why&quot; に焦点を当てた内容を書くことに努めています。 道具の使い方や技術紹介ではなく、それらが、なぜその形で在るのか、どんな問題を解決するために存在するのかを考えたいと思っています。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/why-hard-to-talk-to/"
-            title="なんで人と話しにくいんだっけ、傾向と対策"
-            date="2023-12-31T12:42:00.000+09:00"
-            summary="私は「コミュニケーションが苦手」だと思っていたけどそうでもないらしいです。 周りの方々からは、コミュニケーションは取れているし、話すこともできているというフィードバックをいただきます。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/unemployed/"
-            title="1 ヶ月間無職をした"
-            date="2022-10-31T18:59:04.620+09:00"
-            summary="社会のみんなへ。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/soki/"
-            title="とろとろ軟骨にあらずんばソーキ汁にあらず"
-            date="2022-06-21T02:18:27.707+09:00"
-            summary="最寄りのスーパーで豚バラ軟骨という部位を見つけました。 5cm くらいの大きさの塊の肉で、白いカチカチの軟骨が見えています。 出汁をとるために骨付きスペアリブと昆布も買って、こいつを煮込むことにしました。"
-          ></blog-post-entry>
-<blog-post-entry
-            href="/posts/how_to_cook_delicious_tacos/"
-            title="おいしいタコスの作り方"
-            date="2021-12-16T02:13:00.000+09:00"
-            summary="この記事は、ESM Advent Calender 2021 の16日目の記事です。"
-          ></blog-post-entry>
+        <blog-post-entry>
+            <a href="/posts/why-not-how/">なぜ &quot;How&quot; の記事を書きたくないか</a>
+            <time datetime="2024-01-21T12:40:49.960Z">2024年1月21日</time>
+            <p>私はこのブログで、&quot;How&quot; よりも &quot;Why&quot; に焦点を当てた内容を書くことに努めています。 道具の使い方や技術紹介ではなく、それらが、なぜその形で在るのか、どんな問題を解決するために存在するのかを考えたいと思っています。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/why-hard-to-talk-to/">なんで人と話しにくいんだっけ、傾向と対策</a>
+            <time datetime="2023-12-31T12:42:00.000+09:00">2023年12月31日</time>
+            <p>私は「コミュニケーションが苦手」だと思っていたけどそうでもないらしいです。 周りの方々からは、コミュニケーションは取れているし、話すこともできているというフィードバックをいただきます。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/unemployed/">1 ヶ月間無職をした</a>
+            <time datetime="2022-10-31T18:59:04.620+09:00">2022年10月31日</time>
+            <p>社会のみんなへ。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/soki/">とろとろ軟骨にあらずんばソーキ汁にあらず</a>
+            <time datetime="2022-06-21T02:18:27.707+09:00">2022年6月21日</time>
+            <p>最寄りのスーパーで豚バラ軟骨という部位を見つけました。 5cm くらいの大きさの塊の肉で、白いカチカチの軟骨が見えています。 出汁をとるために骨付きスペアリブと昆布も買って、こいつを煮込むことにしました。</p>
+          </blog-post-entry>
+<blog-post-entry>
+            <a href="/posts/how_to_cook_delicious_tacos/">おいしいタコスの作り方</a>
+            <time datetime="2021-12-16T02:13:00.000+09:00">2021年12月16日</time>
+            <p>この記事は、ESM Advent Calender 2021 の16日目の記事です。</p>
+          </blog-post-entry>
       </blog-posts-section>
-      <blog-back-link href="/">← トップへ</blog-back-link>
+      <blog-back-link><a href="/">← トップへ</a></blog-back-link>
     </main>
   </body>
 </html>

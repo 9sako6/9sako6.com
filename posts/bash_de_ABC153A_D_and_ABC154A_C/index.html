@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     
@@ -20,10 +21,10 @@
   </head>
   <body>
     <main>
-      <blog-nav></blog-nav>
+      <blog-nav><a href="/posts/">Blog</a></blog-nav>
       <article>
         <h1>bashでABC153 A~DとABC154 A~Cを解いた</h1>
-        <blog-post-meta date="2020-02-13T00:02:00.000+09:00"></blog-post-meta>
+        <blog-post-meta><time datetime="2020-02-13T00:02:00.000+09:00">2020年2月13日</time></blog-post-meta>
         <div class="content" data-render-math="true"><p>ABC153 A-DとABC154 A-Cの計7問をbashで解きました。
 パズルみたいで面白かったです。
 解く中で得た知識を備忘録として残しておきます。</p>
@@ -174,7 +175,7 @@ fi
 </div>
       </article>
       <blog-divider></blog-divider>
-      <blog-back-link href="/posts/">← 記事一覧へ</blog-back-link>
+      <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
     </main>
   </body>
 </html>

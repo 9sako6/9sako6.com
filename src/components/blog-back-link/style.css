@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  margin-top: 6rem;
+  font-size: 0.9em;
+}
+
+::slotted(a) {
+  color: var(--muted);
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.18em;
+}
+
+::slotted(a:hover) {
+  color: var(--link);
+}

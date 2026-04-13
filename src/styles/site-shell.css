@@ -6,7 +6,14 @@
   --muted: #aaa294;
   --line: #302d28;
   --link: #e5ded1;
+  --link-entry: #cbc3b7;
+  --link-entry-hover: #d8d0c2;
   --focus: #cab27a;
+  --message-bg: #2a2519;
+  --message-badge-bg: #b5982a;
+  --message-badge-fg: #1a1400;
+  --footnote-link: #7aa2f7;
+  --footnote-link-hover: #a0bef8;
 }
 
 * {

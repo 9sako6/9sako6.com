@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/src/styles/site-shell.css" />
+    <link rel="stylesheet" href="/src/styles/pre-upgrade.css" />
     <link rel="stylesheet" href="/src/styles/blog.css" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     
@@ -20,10 +21,10 @@
   </head>
   <body>
     <main>
-      <blog-nav></blog-nav>
+      <blog-nav><a href="/posts/">Blog</a></blog-nav>
       <article>
         <h1>TypeScript の satisfies 演算子は何に役立つのか</h1>
-        <blog-post-meta date="2023-07-01T16:38:44.902+09:00"></blog-post-meta>
+        <blog-post-meta><time datetime="2023-07-01T16:38:44.902+09:00">2023年7月1日</time></blog-post-meta>
         <div class="content" data-render-math="true"><h1><code>satisfies</code> 演算子とは</h1>
 <p><a href="https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#the-satisfies-operator">TypeScript 4.9 で導入された</a> <code>satisfies</code> 演算子は、<code>式 satisfies 型</code> のようにして使い、式 が 型にマッチするかどうかをチェックします。</p>
 <p><code>satisfies</code> は、</p>
@@ -165,7 +166,7 @@ await db
 </div>
       </article>
       <blog-divider></blog-divider>
-      <blog-back-link href="/posts/">← 記事一覧へ</blog-back-link>
+      <blog-back-link><a href="/posts/">← 記事一覧へ</a></blog-back-link>
     </main>
   </body>
 </html>

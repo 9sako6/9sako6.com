@@ -116,18 +116,18 @@ a {
 
 [data-footnote-ref] {
   margin-left: 0.25em;
-  color: #7aa2f7;
+  color: var(--footnote-link);
   text-decoration: underline;
   text-decoration-thickness: 0.06em;
   text-underline-offset: 0.15em;
 }
 
 [data-footnote-ref]:hover {
-  color: #a0bef8;
+  color: var(--footnote-link-hover);
 }
 
 [data-footnote-backref] {
-  color: #7aa2f7;
+  color: var(--footnote-link);
 }
 
 

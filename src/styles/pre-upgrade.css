@@ -1,0 +1,51 @@
+blog-nav:not(:defined) {
+  display: block;
+  margin-bottom: 2.5rem;
+}
+
+blog-post-meta:not(:defined) {
+  display: block;
+  margin-top: 0.9rem;
+  color: var(--muted);
+}
+
+blog-post-entry:not(:defined) {
+  display: block;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+blog-posts-section:not(:defined) {
+  display: block;
+}
+
+blog-posts-section:not(:defined) + blog-posts-section:not(:defined) {
+  margin-top: 3.25rem;
+}
+
+blog-divider:not(:defined) {
+  display: block;
+  margin-top: 4rem;
+}
+
+blog-back-link:not(:defined) {
+  display: block;
+  margin-top: 6rem;
+  font-size: 0.9em;
+}
+
+blog-footnotes:not(:defined) {
+  display: block;
+  margin-top: 3rem;
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+blog-message:not(:defined) {
+  display: block;
+  margin: 1.75rem 0;
+  padding: 1rem 1.1rem 1rem 3.2rem;
+  background: var(--message-bg);
+  border-radius: 6px;
+  line-height: 1.8;
+}
