@@ -173,7 +173,7 @@ const outputDir = join(rootDir, "dist");
 const outputPostsDir = join(outputDir, "posts");
 const outputImagesDir = join(outputDir, "images");
 const redirectsPath = join(outputDir, "_redirects");
-const staticEntries = ["404.html", "about", "favicon.ico", "index.html"] as const;
+const staticEntries = ["404.html", "about", "assets", "favicon.ico", "index.html"] as const;
 const categoryOrder = ["Technology", "Random", "Competitive Programming"] as const;
 const inlineSiteShellCss = readFileSync(join(rootDir, "src", "styles", "site-shell.css"), "utf8");
 const inlineBlogCss = readFileSync(join(rootDir, "src", "styles", "blog.css"), "utf8");
@@ -530,6 +530,7 @@ function writeRedirects(posts: PublishedPost[]) {
     "/ /index.html 200",
     "/favicon.ico /favicon.ico 200",
     "/about/* /about/:splat 200",
+    "/assets/* /assets/:splat 200",
     "/posts/* /posts/:splat 200",
     "/images/* /images/:splat 200",
     "/src/* /src/:splat 200",

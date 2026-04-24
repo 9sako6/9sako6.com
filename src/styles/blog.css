@@ -55,7 +55,7 @@ a {
   gap: 1rem;
   margin-bottom: clamp(2.8rem, 8vw, 5rem);
   padding-bottom: 0.75rem;
-  border-bottom: 3px solid var(--line-strong);
+  border-bottom: 5px double var(--line-strong);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
@@ -101,7 +101,7 @@ a {
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 0.9rem;
-  color: var(--accent);
+  color: var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 0.78rem;
   font-weight: 800;
@@ -110,7 +110,7 @@ a {
 .post-index-section h2::after {
   content: "";
   height: 1px;
-  background: var(--line-strong);
+  background: var(--line);
 }
 
 .post-list {
@@ -135,7 +135,7 @@ a {
   text-decoration: underline;
   text-decoration-thickness: 0.05em;
   text-underline-offset: 0.16em;
-  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--text) 42%, transparent);
 }
 
 .post-entry a:hover {
@@ -163,13 +163,13 @@ a {
   width: 100%;
   margin: 4rem 0 0;
   border: 0;
-  border-top: 3px double var(--line-strong);
+  border-top: 5px double var(--line-strong);
 }
 
 .content {
   margin-top: clamp(2.5rem, 7vw, 4rem);
   padding-top: 1.25rem;
-  border-top: 1px solid var(--line-strong);
+  border-top: 1px solid var(--line);
 }
 
 .content h1,
@@ -183,7 +183,7 @@ a {
   max-width: 100%;
   height: auto;
   margin: 1.5rem 0;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line);
 }
 
 .content pre {
@@ -191,7 +191,7 @@ a {
   padding: 1rem;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--accent-cool);
+  border-left: 4px solid var(--line-strong);
 }
 
 .content code {
@@ -215,7 +215,7 @@ a {
   margin: 1.75rem 0;
   padding: 0.2rem 0 0.2rem 1.1rem;
   color: var(--text);
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--line-strong);
   font-size: 1.08em;
 }
 
@@ -232,7 +232,7 @@ a {
   padding: 1rem 1.1rem;
   background: var(--message-bg);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--accent-leaf);
+  border-left: 4px solid var(--line-strong);
   border-radius: 0;
   line-height: 1.8;
 }

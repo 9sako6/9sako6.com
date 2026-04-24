@@ -24,6 +24,31 @@ describe("static page accessibility", () => {
     expect(externalLinks.length).toBeGreaterThan(0);
     expect(externalLinks.every((link) => /\brel="[^"]*\bnoopener\b[^"]*\bnoreferrer\b[^"]*"/.test(link))).toBe(true);
   });
+
+  test("トップページの浮遊キャラクターは装飾として扱う", () => {
+    const html = readProjectFile("static/index.html");
+
+    expect(html).toContain('class="float-friend"');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('src="/assets/ghost-01.png"');
+    expect(html).toContain('src="/assets/ghost-02.png"');
+    expect(html).toContain('src="/assets/ghost-03.png"');
+    expect(html).toContain('alt=""');
+  });
+
+  test("トップページは読み仮名をrubyに集約し、単独の読み仮名を表示しない", () => {
+    const html = readProjectFile("static/index.html");
+
+    expect(html).toContain("<ruby>9sako6<rt>くさころ</rt></ruby>");
+    expect(html).not.toContain('class="name-reading"');
+  });
+
+  test("トップページは初期描画用の暗い背景色をhead内に持つ", () => {
+    const html = readProjectFile("static/index.html");
+
+    expect(html).toContain("html{background:#070706");
+    expect(html).toContain("body{background:#070706");
+  });
 });
 
 describe("shared accessibility styles", () => {
@@ -33,6 +58,12 @@ describe("shared accessibility styles", () => {
     expect(css).toContain("@media (forced-colors: active)");
     expect(css).toContain("CanvasText");
   });
+
+  test("サイト全体はダークカラースキームを宣言する", () => {
+    const css = readProjectFile("src/styles/site-shell.css");
+
+    expect(css).toContain("color-scheme: dark");
+  });
 });
 
 describe("generated static page cache busting", () => {
@@ -41,5 +72,11 @@ describe("generated static page cache busting", () => {
 
     expect(html).toMatch(/href="\/src\/styles\/site-shell\.css\?v=[a-f0-9]{12}"/);
     expect(html).not.toContain('href="/src/styles/site-shell.css"');
+  });
+
+  test("固定ページ用の画像アセットも生成先に含める", () => {
+    const asset = readFileSync(join(rootDir, "dist", "assets", "ghost-01.png"));
+
+    expect(asset.byteLength).toBeGreaterThan(10_000);
   });
 });

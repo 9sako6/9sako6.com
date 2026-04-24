@@ -14,26 +14,26 @@
     <meta name="twitter:card" content="summary" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <style>:root {
-  color-scheme: light;
-  --bg: #f7f7f1;
-  --paper: #fffffb;
-  --panel: #eeeee6;
-  --text: #171715;
-  --muted: #5d6259;
-  --line: #c8c8bc;
-  --line-strong: #171715;
-  --accent: #a72f24;
-  --accent-cool: #16617c;
-  --accent-leaf: #4f663f;
-  --link: #171715;
-  --link-entry: #171715;
-  --link-entry-hover: #a72f24;
-  --focus: #0b62d6;
-  --message-bg: #eef3f0;
-  --message-badge-bg: #a72f24;
-  --message-badge-fg: #fffffb;
-  --footnote-link: #0d5f8b;
-  --footnote-link-hover: #8f261e;
+  color-scheme: dark;
+  --bg: #070706;
+  --paper: #11100f;
+  --panel: #171615;
+  --text: #f4efe6;
+  --muted: #b8b0a4;
+  --line: #34312e;
+  --line-strong: #e5ded2;
+  --accent: #f4efe6;
+  --accent-cool: #cfc7ba;
+  --accent-leaf: #cfc7ba;
+  --link: #fffaf1;
+  --link-entry: #f4efe6;
+  --link-entry-hover: #ffffff;
+  --focus: #ffffff;
+  --message-bg: #141312;
+  --message-badge-bg: #f4efe6;
+  --message-badge-fg: #070706;
+  --footnote-link: #e5ded2;
+  --footnote-link-hover: #ffffff;
 }
 
 * {
@@ -49,8 +49,8 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    linear-gradient(90deg, rgba(23, 23, 21, 0.035) 1px, transparent 1px) 0 0 / 72px 72px,
-    linear-gradient(180deg, rgba(23, 23, 21, 0.025) 1px, transparent 1px) 0 0 / 72px 72px,
+    linear-gradient(90deg, rgba(242, 234, 219, 0.035) 1px, transparent 1px) 0 0 / 72px 72px,
+    linear-gradient(180deg, rgba(242, 234, 219, 0.026) 1px, transparent 1px) 0 0 / 72px 72px,
     var(--bg);
   color: var(--text);
   font: 16px/1.85 "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
@@ -96,8 +96,8 @@ a:focus-visible {
 }
 
 ::selection {
-  background: #ffe06d;
-  color: #171715;
+  background: #f4efe6;
+  color: #070706;
 }
 
 @media (forced-colors: active) {
@@ -175,7 +175,7 @@ a {
   gap: 1rem;
   margin-bottom: clamp(2.8rem, 8vw, 5rem);
   padding-bottom: 0.75rem;
-  border-bottom: 3px solid var(--line-strong);
+  border-bottom: 5px double var(--line-strong);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
@@ -221,7 +221,7 @@ a {
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 0.9rem;
-  color: var(--accent);
+  color: var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 0.78rem;
   font-weight: 800;
@@ -230,7 +230,7 @@ a {
 .post-index-section h2::after {
   content: "";
   height: 1px;
-  background: var(--line-strong);
+  background: var(--line);
 }
 
 .post-list {
@@ -255,7 +255,7 @@ a {
   text-decoration: underline;
   text-decoration-thickness: 0.05em;
   text-underline-offset: 0.16em;
-  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--text) 42%, transparent);
 }
 
 .post-entry a:hover {
@@ -283,13 +283,13 @@ a {
   width: 100%;
   margin: 4rem 0 0;
   border: 0;
-  border-top: 3px double var(--line-strong);
+  border-top: 5px double var(--line-strong);
 }
 
 .content {
   margin-top: clamp(2.5rem, 7vw, 4rem);
   padding-top: 1.25rem;
-  border-top: 1px solid var(--line-strong);
+  border-top: 1px solid var(--line);
 }
 
 .content h1,
@@ -303,7 +303,7 @@ a {
   max-width: 100%;
   height: auto;
   margin: 1.5rem 0;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line);
 }
 
 .content pre {
@@ -311,7 +311,7 @@ a {
   padding: 1rem;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--accent-cool);
+  border-left: 4px solid var(--line-strong);
 }
 
 .content code {
@@ -335,7 +335,7 @@ a {
   margin: 1.75rem 0;
   padding: 0.2rem 0 0.2rem 1.1rem;
   color: var(--text);
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--line-strong);
   font-size: 1.08em;
 }
 
@@ -352,7 +352,7 @@ a {
   padding: 1rem 1.1rem;
   background: var(--message-bg);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--accent-leaf);
+  border-left: 4px solid var(--line-strong);
   border-radius: 0;
   line-height: 1.8;
 }
