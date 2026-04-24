@@ -450,7 +450,8 @@ function buildPostPage(post: PublishedPost): string {
             <p class="post-meta"><time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time></p>
           </div>
           <div class="post-reader" aria-hidden="true">
-            <img src="/assets/reader-ghost.png" alt="" width="640" height="640" loading="eager" decoding="async" />
+            <img class="post-reader-frame" src="/assets/reader-ghost.png" alt="" width="640" height="640" loading="eager" decoding="async" />
+            <img class="post-reader-frame" src="/assets/chef-ghost.png" alt="" width="640" height="640" loading="eager" decoding="async" />
           </div>
         </header>
         <div class="content"${includeMath ? ' data-render-math="true"' : ""}>${html}</div>
