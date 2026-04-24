@@ -145,6 +145,36 @@ article > h1 {
   line-height: 1.05;
 }
 
+.post-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(7rem, 12rem);
+  gap: clamp(1.4rem, 5vw, 3.25rem);
+  align-items: end;
+}
+
+.post-hero h1 {
+  max-width: 12ch;
+  font-size: clamp(2rem, 6vw, 4.25rem);
+  line-height: 1.05;
+}
+
+.post-reader {
+  justify-self: end;
+  width: min(100%, 10.5rem);
+  aspect-ratio: 1;
+  opacity: 0.9;
+  filter: drop-shadow(0 1.25rem 2rem rgba(0, 0, 0, 0.45));
+  animation: post-reader-float 9s ease-in-out infinite;
+  will-change: transform;
+}
+
+.post-reader img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 h2 {
   margin: 0;
   font-size: 1rem;
@@ -412,6 +442,19 @@ a {
     max-width: 100%;
   }
 
+  .post-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(5.5rem, 26vw);
+    align-items: start;
+  }
+
+  .post-hero h1 {
+    max-width: 100%;
+  }
+
+  .post-reader {
+    width: min(7rem, 28vw);
+  }
+
   .blog-nav,
   .back-link,
   .post-index-section h2,
@@ -428,6 +471,27 @@ a {
     font-size: 1rem;
   }
 }
+
+@keyframes post-reader-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-0.7deg);
+  }
+
+  33% {
+    transform: translate3d(0.2rem, -0.55rem, 0) rotate(1.1deg);
+  }
+
+  66% {
+    transform: translate3d(-0.22rem, -0.18rem, 0) rotate(-1.2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-reader {
+    animation: none;
+  }
+}
 </style>
     
   </head>
@@ -438,8 +502,15 @@ a {
         <a href="/posts/">Blog</a>
       </nav>
       <article>
-        <h1>#define int long longは何がいけないのか</h1>
-        <p class="post-meta"><time datetime="2020-04-07T23:35:00.000+09:00">2020年4月7日</time></p>
+        <header class="post-hero">
+          <div>
+            <h1>#define int long longは何がいけないのか</h1>
+            <p class="post-meta"><time datetime="2020-04-07T23:35:00.000+09:00">2020年4月7日</time></p>
+          </div>
+          <div class="post-reader" aria-hidden="true">
+            <img src="/assets/reader-ghost.png" alt="" width="640" height="640" loading="eager" decoding="async" />
+          </div>
+        </header>
         <div class="content"><h1>はじめに</h1>
 <p>C++で競技プログラミングをしていると目にする<code>#define int long long</code>。
 これをするとある程度はオーバーフローを気にしなくて良くなる反面、main関数の戻り値の型をintにする工夫をしないといけなくなったり、見た目はint型の変数で<code>printf(&quot;%lld&quot;, hoge);</code>しないといけなくなったりします。</p>

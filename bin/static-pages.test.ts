@@ -36,6 +36,15 @@ describe("static page accessibility", () => {
     expect(html).toContain('alt=""');
   });
 
+  test("記事詳細ページの読書キャラクターは装飾として扱う", () => {
+    const html = readProjectFile("dist/posts/yukicoder909/index.html");
+
+    expect(html).toContain('class="post-reader"');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('src="/assets/reader-ghost.png"');
+    expect(html).toContain('alt=""');
+  });
+
   test("トップページは読み仮名をrubyに集約し、単独の読み仮名を表示しない", () => {
     const html = readProjectFile("static/index.html");
 
@@ -91,7 +100,9 @@ describe("generated static page cache busting", () => {
 
   test("固定ページ用の画像アセットも生成先に含める", () => {
     const asset = readFileSync(join(rootDir, "dist", "assets", "ghost-01.png"));
+    const readerAsset = readFileSync(join(rootDir, "dist", "assets", "reader-ghost.png"));
 
     expect(asset.byteLength).toBeGreaterThan(10_000);
+    expect(readerAsset.byteLength).toBeGreaterThan(10_000);
   });
 });

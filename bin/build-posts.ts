@@ -444,8 +444,15 @@ function buildPostPage(post: PublishedPost): string {
         <a href="/posts/">Blog</a>
       </nav>
       <article>
-        <h1>${escapeHtml(post.meta.title)}</h1>
-        <p class="post-meta"><time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time></p>
+        <header class="post-hero">
+          <div>
+            <h1>${escapeHtml(post.meta.title)}</h1>
+            <p class="post-meta"><time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time></p>
+          </div>
+          <div class="post-reader" aria-hidden="true">
+            <img src="/assets/reader-ghost.png" alt="" width="640" height="640" loading="eager" decoding="async" />
+          </div>
+        </header>
         <div class="content"${includeMath ? ' data-render-math="true"' : ""}>${html}</div>
       </article>
       <hr class="blog-divider" />
