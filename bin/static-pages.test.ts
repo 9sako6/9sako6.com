@@ -34,3 +34,12 @@ describe("shared accessibility styles", () => {
     expect(css).toContain("CanvasText");
   });
 });
+
+describe("generated static page cache busting", () => {
+  test("固定ページのCSS参照は生成後にバージョン付きURLになる", () => {
+    const html = readProjectFile("dist/index.html");
+
+    expect(html).toMatch(/href="\/src\/styles\/site-shell\.css\?v=[a-f0-9]{12}"/);
+    expect(html).not.toContain('href="/src/styles/site-shell.css"');
+  });
+});

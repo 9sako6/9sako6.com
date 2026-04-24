@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -176,6 +177,12 @@ const staticEntries = ["404.html", "about", "favicon.ico", "index.html"] as cons
 const categoryOrder = ["Technology", "Random", "Competitive Programming"] as const;
 const inlineSiteShellCss = readFileSync(join(rootDir, "src", "styles", "site-shell.css"), "utf8");
 const inlineBlogCss = readFileSync(join(rootDir, "src", "styles", "blog.css"), "utf8");
+const styleAssetVersion = createHash("sha256")
+  .update(inlineSiteShellCss)
+  .update("\n")
+  .update(inlineBlogCss)
+  .digest("hex")
+  .slice(0, 12);
 let currentImageDimensions: Record<string, ImageDimensions> = {};
 
 function escapeHtml(value: string): string {
@@ -460,7 +467,18 @@ function cleanOutput() {
 
 function copyStaticEntries() {
   for (const entry of staticEntries) {
-    cpSync(join(staticDir, entry), join(outputDir, entry), { recursive: true });
+    const sourcePath = join(staticDir, entry);
+    const targetPath = join(outputDir, entry);
+
+    if (entry.endsWith(".html")) {
+      writeFileSync(targetPath, versionStylesheetLinks(readFileSync(sourcePath, "utf8")));
+    } else {
+      cpSync(sourcePath, targetPath, { recursive: true });
+      const nestedIndexPath = join(targetPath, "index.html");
+      if (existsSync(nestedIndexPath)) {
+        writeFileSync(nestedIndexPath, versionStylesheetLinks(readFileSync(nestedIndexPath, "utf8")));
+      }
+    }
   }
 
   mkdirSync(join(outputDir, "src", "styles"), { recursive: true });
@@ -468,6 +486,10 @@ function copyStaticEntries() {
   cpSync(join(rootDir, "src", "styles", "site-shell.css"), join(outputDir, "src", "styles", "site-shell.css"));
   cpSync(join(rootDir, "src", "styles", "blog.css"), join(outputDir, "src", "styles", "blog.css"));
   cpSync(join(rootDir, "src", "behaviors", "render-math.js"), join(outputDir, "src", "behaviors", "render-math.js"));
+}
+
+function versionStylesheetLinks(html: string): string {
+  return html.replace(/href="(\/src\/styles\/(?:site-shell|blog)\.css)"/g, `href="$1?v=${styleAssetVersion}"`);
 }
 
 function copyReferencedImages(posts: PublishedPost[]) {
