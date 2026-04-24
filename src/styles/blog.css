@@ -1,6 +1,7 @@
 h1,
 h2,
 h3 {
+  font-family: var(--font-display);
   line-height: 1.35;
   font-weight: 500;
 }
@@ -21,7 +22,7 @@ h2 {
   margin: 0;
   font-size: 1rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -56,10 +57,10 @@ a {
   margin-bottom: clamp(2.8rem, 8vw, 5rem);
   padding-bottom: 0.75rem;
   border-bottom: 5px double var(--line-strong);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -67,8 +68,9 @@ a {
   margin-top: 6rem;
   padding-top: 1rem;
   border-top: 1px solid var(--line);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.86em;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .back-link a {
@@ -102,9 +104,10 @@ a {
   align-items: center;
   gap: 0.9rem;
   color: var(--text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .post-index-section h2::after {
@@ -130,6 +133,7 @@ a {
 
 .post-entry a {
   color: var(--link-entry);
+  font-family: var(--font-display);
   font-size: clamp(1.16rem, 2.8vw, 1.55rem);
   line-height: 1.35;
   text-decoration: underline;
@@ -147,15 +151,20 @@ a {
   display: block;
   margin-top: 0.35rem;
   color: var(--muted);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.84rem;
-  letter-spacing: 0.04em;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .post-entry p {
   grid-column: 1 / -1;
   margin: 0.15rem 0 0;
   max-width: 34rem;
+  color: var(--muted);
+}
+
+.content {
   color: var(--muted);
 }
 
@@ -195,7 +204,7 @@ a {
 }
 
 .content code {
-  font-family: "SFMono-Regular", "Menlo", "Monaco", "Cascadia Mono", ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.88em;
   padding: 0.15em 0.35em;
   background: var(--paper);
@@ -274,6 +283,14 @@ a {
 @media (max-width: 640px) {
   article > h1 {
     max-width: 100%;
+  }
+
+  .blog-nav,
+  .back-link,
+  .post-index-section h2,
+  .post-entry time,
+  .post-meta {
+    font-size: 1rem;
   }
 
   .post-entry {

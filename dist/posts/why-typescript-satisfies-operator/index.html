@@ -19,22 +19,26 @@
   --bg: #070706;
   --paper: #11100f;
   --panel: #171615;
-  --text: #f4efe6;
-  --muted: #b8b0a4;
+  --text: #e6ded2;
+  --muted: #aea69a;
   --line: #34312e;
   --line-strong: #e5ded2;
-  --accent: #f4efe6;
+  --accent: #e6ded2;
   --accent-cool: #cfc7ba;
   --accent-leaf: #cfc7ba;
-  --link: #fffaf1;
-  --link-entry: #f4efe6;
-  --link-entry-hover: #ffffff;
+  --link: #ebe4d8;
+  --link-entry: #e6ded2;
+  --link-entry-hover: #fff8ed;
   --focus: #ffffff;
   --message-bg: #141312;
-  --message-badge-bg: #f4efe6;
+  --message-badge-bg: #e6ded2;
   --message-badge-fg: #070706;
-  --footnote-link: #e5ded2;
-  --footnote-link-hover: #ffffff;
+  --footnote-link: #ddd4c7;
+  --footnote-link-hover: #fff8ed;
+  --font-display: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Baskerville", "Times New Roman", serif;
+  --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
+  --font-ui: "Avenir Next", "Helvetica Neue", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "SFMono-Regular", "Menlo", "Monaco", "Cascadia Mono", ui-monospace, monospace;
 }
 
 * {
@@ -54,7 +58,9 @@ body {
     linear-gradient(180deg, rgba(242, 234, 219, 0.026) 1px, transparent 1px) 0 0 / 72px 72px,
     var(--bg);
   color: var(--text);
-  font: 16px/1.85 "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
+  font: 17px/1.9 var(--font-serif);
+  font-kerning: normal;
+  font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
 }
 
@@ -85,7 +91,7 @@ a:focus-visible {
   padding: 0.55rem 0.8rem;
   background: var(--text);
   color: var(--paper);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-ui);
   font-size: 0.9rem;
   line-height: 1.2;
   text-decoration: none;
@@ -97,7 +103,7 @@ a:focus-visible {
 }
 
 ::selection {
-  background: #f4efe6;
+  background: #e6ded2;
   color: #070706;
 }
 
@@ -122,6 +128,7 @@ a:focus-visible {
 h1,
 h2,
 h3 {
+  font-family: var(--font-display);
   line-height: 1.35;
   font-weight: 500;
 }
@@ -142,7 +149,7 @@ h2 {
   margin: 0;
   font-size: 1rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -177,10 +184,10 @@ a {
   margin-bottom: clamp(2.8rem, 8vw, 5rem);
   padding-bottom: 0.75rem;
   border-bottom: 5px double var(--line-strong);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -188,8 +195,9 @@ a {
   margin-top: 6rem;
   padding-top: 1rem;
   border-top: 1px solid var(--line);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.86em;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .back-link a {
@@ -223,9 +231,10 @@ a {
   align-items: center;
   gap: 0.9rem;
   color: var(--text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .post-index-section h2::after {
@@ -251,6 +260,7 @@ a {
 
 .post-entry a {
   color: var(--link-entry);
+  font-family: var(--font-display);
   font-size: clamp(1.16rem, 2.8vw, 1.55rem);
   line-height: 1.35;
   text-decoration: underline;
@@ -268,15 +278,20 @@ a {
   display: block;
   margin-top: 0.35rem;
   color: var(--muted);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.84rem;
-  letter-spacing: 0.04em;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .post-entry p {
   grid-column: 1 / -1;
   margin: 0.15rem 0 0;
   max-width: 34rem;
+  color: var(--muted);
+}
+
+.content {
   color: var(--muted);
 }
 
@@ -316,7 +331,7 @@ a {
 }
 
 .content code {
-  font-family: "SFMono-Regular", "Menlo", "Monaco", "Cascadia Mono", ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.88em;
   padding: 0.15em 0.35em;
   background: var(--paper);
@@ -395,6 +410,14 @@ a {
 @media (max-width: 640px) {
   article > h1 {
     max-width: 100%;
+  }
+
+  .blog-nav,
+  .back-link,
+  .post-index-section h2,
+  .post-entry time,
+  .post-meta {
+    font-size: 1rem;
   }
 
   .post-entry {

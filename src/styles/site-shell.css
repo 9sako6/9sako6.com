@@ -3,22 +3,26 @@
   --bg: #070706;
   --paper: #11100f;
   --panel: #171615;
-  --text: #f4efe6;
-  --muted: #b8b0a4;
+  --text: #e6ded2;
+  --muted: #aea69a;
   --line: #34312e;
   --line-strong: #e5ded2;
-  --accent: #f4efe6;
+  --accent: #e6ded2;
   --accent-cool: #cfc7ba;
   --accent-leaf: #cfc7ba;
-  --link: #fffaf1;
-  --link-entry: #f4efe6;
-  --link-entry-hover: #ffffff;
+  --link: #ebe4d8;
+  --link-entry: #e6ded2;
+  --link-entry-hover: #fff8ed;
   --focus: #ffffff;
   --message-bg: #141312;
-  --message-badge-bg: #f4efe6;
+  --message-badge-bg: #e6ded2;
   --message-badge-fg: #070706;
-  --footnote-link: #e5ded2;
-  --footnote-link-hover: #ffffff;
+  --footnote-link: #ddd4c7;
+  --footnote-link-hover: #fff8ed;
+  --font-display: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Baskerville", "Times New Roman", serif;
+  --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
+  --font-ui: "Avenir Next", "Helvetica Neue", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "SFMono-Regular", "Menlo", "Monaco", "Cascadia Mono", ui-monospace, monospace;
 }
 
 * {
@@ -38,7 +42,9 @@ body {
     linear-gradient(180deg, rgba(242, 234, 219, 0.026) 1px, transparent 1px) 0 0 / 72px 72px,
     var(--bg);
   color: var(--text);
-  font: 16px/1.85 "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
+  font: 17px/1.9 var(--font-serif);
+  font-kerning: normal;
+  font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
 }
 
@@ -69,7 +75,7 @@ a:focus-visible {
   padding: 0.55rem 0.8rem;
   background: var(--text);
   color: var(--paper);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-ui);
   font-size: 0.9rem;
   line-height: 1.2;
   text-decoration: none;
@@ -81,7 +87,7 @@ a:focus-visible {
 }
 
 ::selection {
-  background: #f4efe6;
+  background: #e6ded2;
   color: #070706;
 }
 
