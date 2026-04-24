@@ -49,6 +49,21 @@ describe("static page accessibility", () => {
     expect(html).toContain("html{background:#070706");
     expect(html).toContain("body{background:#070706");
   });
+
+  test("iOS Safariで日付を電話番号として自動リンク化しない", () => {
+    const html = readProjectFile("static/index.html");
+
+    expect(html).toContain('<meta name="format-detection" content="telephone=no" />');
+    expect(html).toContain("2025/06 - 現在");
+  });
+
+  test("スマホ表示の経歴ラベルは16px以上を保つ", () => {
+    const html = readProjectFile("static/index.html");
+
+    expect(html).toContain(".career h2");
+    expect(html).toContain("font-size: 1rem;");
+    expect(html).toContain(".period");
+  });
 });
 
 describe("shared accessibility styles", () => {
