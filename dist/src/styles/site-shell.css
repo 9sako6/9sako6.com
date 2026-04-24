@@ -1,19 +1,24 @@
 :root {
-  color-scheme: dark;
-  --bg: #161513;
-  --panel: #1d1b19;
-  --text: #d7d0c4;
-  --muted: #aaa294;
-  --line: #302d28;
-  --link: #e5ded1;
-  --link-entry: #cbc3b7;
-  --link-entry-hover: #d8d0c2;
-  --focus: #cab27a;
-  --message-bg: #2a2519;
-  --message-badge-bg: #b5982a;
-  --message-badge-fg: #1a1400;
-  --footnote-link: #7aa2f7;
-  --footnote-link-hover: #a0bef8;
+  color-scheme: light;
+  --bg: #f7f7f1;
+  --paper: #fffffb;
+  --panel: #eeeee6;
+  --text: #171715;
+  --muted: #5d6259;
+  --line: #c8c8bc;
+  --line-strong: #171715;
+  --accent: #a72f24;
+  --accent-cool: #16617c;
+  --accent-leaf: #4f663f;
+  --link: #171715;
+  --link-entry: #171715;
+  --link-entry-hover: #a72f24;
+  --focus: #0b62d6;
+  --message-bg: #eef3f0;
+  --message-badge-bg: #a72f24;
+  --message-badge-fg: #fffffb;
+  --footnote-link: #0d5f8b;
+  --footnote-link-hover: #8f261e;
 }
 
 * {
@@ -28,9 +33,13 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  background:
+    linear-gradient(90deg, rgba(23, 23, 21, 0.035) 1px, transparent 1px) 0 0 / 72px 72px,
+    linear-gradient(180deg, rgba(23, 23, 21, 0.025) 1px, transparent 1px) 0 0 / 72px 72px,
+    var(--bg);
   color: var(--text);
   font: 16px/1.85 "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
+  text-rendering: optimizeLegibility;
 }
 
 main {
@@ -39,9 +48,53 @@ main {
   padding: 52px 24px 88px;
 }
 
+a {
+  color: var(--link);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
 a:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  padding: 0.55rem 0.8rem;
+  background: var(--text);
+  color: var(--paper);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transform: translateY(-150%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+::selection {
+  background: #ffe06d;
+  color: #171715;
+}
+
+@media (forced-colors: active) {
+  body {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  a:focus-visible,
+  .skip-link:focus {
+    outline: 3px solid CanvasText;
+  }
 }
 
 @media (max-width: 640px) {

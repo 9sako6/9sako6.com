@@ -14,21 +14,26 @@
     <meta name="twitter:card" content="summary" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <style>:root {
-  color-scheme: dark;
-  --bg: #161513;
-  --panel: #1d1b19;
-  --text: #d7d0c4;
-  --muted: #aaa294;
-  --line: #302d28;
-  --link: #e5ded1;
-  --link-entry: #cbc3b7;
-  --link-entry-hover: #d8d0c2;
-  --focus: #cab27a;
-  --message-bg: #2a2519;
-  --message-badge-bg: #b5982a;
-  --message-badge-fg: #1a1400;
-  --footnote-link: #7aa2f7;
-  --footnote-link-hover: #a0bef8;
+  color-scheme: light;
+  --bg: #f7f7f1;
+  --paper: #fffffb;
+  --panel: #eeeee6;
+  --text: #171715;
+  --muted: #5d6259;
+  --line: #c8c8bc;
+  --line-strong: #171715;
+  --accent: #a72f24;
+  --accent-cool: #16617c;
+  --accent-leaf: #4f663f;
+  --link: #171715;
+  --link-entry: #171715;
+  --link-entry-hover: #a72f24;
+  --focus: #0b62d6;
+  --message-bg: #eef3f0;
+  --message-badge-bg: #a72f24;
+  --message-badge-fg: #fffffb;
+  --footnote-link: #0d5f8b;
+  --footnote-link-hover: #8f261e;
 }
 
 * {
@@ -43,9 +48,13 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  background:
+    linear-gradient(90deg, rgba(23, 23, 21, 0.035) 1px, transparent 1px) 0 0 / 72px 72px,
+    linear-gradient(180deg, rgba(23, 23, 21, 0.025) 1px, transparent 1px) 0 0 / 72px 72px,
+    var(--bg);
   color: var(--text);
   font: 16px/1.85 "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
+  text-rendering: optimizeLegibility;
 }
 
 main {
@@ -54,9 +63,53 @@ main {
   padding: 52px 24px 88px;
 }
 
+a {
+  color: var(--link);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
 a:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  padding: 0.55rem 0.8rem;
+  background: var(--text);
+  color: var(--paper);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transform: translateY(-150%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+::selection {
+  background: #ffe06d;
+  color: #171715;
+}
+
+@media (forced-colors: active) {
+  body {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  a:focus-visible,
+  .skip-link:focus {
+    outline: 3px solid CanvasText;
+  }
 }
 
 @media (max-width: 640px) {
@@ -74,11 +127,14 @@ h3 {
 
 h1 {
   margin: 0;
-  font-size: clamp(1.85rem, 4.5vw, 2.45rem);
+  font-size: clamp(2rem, 5vw, 3.7rem);
+  letter-spacing: 0;
 }
 
 article > h1 {
-  font-size: 1.875rem;
+  max-width: 12ch;
+  font-size: clamp(2rem, 6vw, 4.25rem);
+  line-height: 1.05;
 }
 
 h2 {
@@ -86,6 +142,7 @@ h2 {
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .content h1 {
@@ -109,16 +166,29 @@ li {
 a {
   color: var(--link);
   text-decoration-thickness: 0.08em;
-  text-underline-offset: 0.18em;
+  text-underline-offset: 0.2em;
 }
 
 .blog-nav {
-  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(2.8rem, 8vw, 5rem);
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--line-strong);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .back-link {
   margin-top: 6rem;
-  font-size: 0.9em;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.86em;
 }
 
 .back-link a {
@@ -143,28 +213,49 @@ a {
 }
 
 .post-index-section + .post-index-section {
-  margin-top: 3.25rem;
+  margin-top: clamp(3rem, 8vw, 5rem);
+}
+
+.post-index-section h2 {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--accent);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.post-index-section h2::after {
+  content: "";
+  height: 1px;
+  background: var(--line-strong);
 }
 
 .post-list {
-  margin: 1rem 0 0;
+  margin: 1.25rem 0 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--line);
+  border-top: 0;
 }
 
 .post-entry {
-  padding: 0.95rem 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 9rem;
+  gap: 0.5rem 1.5rem;
+  padding: 1.1rem 0 1.25rem;
   border-bottom: 1px solid var(--line);
 }
 
 .post-entry a {
   color: var(--link-entry);
-  font-size: 1.08rem;
+  font-size: clamp(1.16rem, 2.8vw, 1.55rem);
+  line-height: 1.35;
   text-decoration: underline;
   text-decoration-thickness: 0.05em;
-  text-underline-offset: 0.14em;
-  text-decoration-color: color-mix(in srgb, var(--link-entry) 45%, transparent);
+  text-underline-offset: 0.16em;
+  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .post-entry a:hover {
@@ -174,25 +265,31 @@ a {
 .post-entry time,
 .post-meta {
   display: block;
-  margin-top: 0.7rem;
+  margin-top: 0.35rem;
   color: var(--muted);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
 }
 
 .post-entry p {
-  margin: 0.8rem 0 0;
+  grid-column: 1 / -1;
+  margin: 0.15rem 0 0;
   max-width: 34rem;
   color: var(--muted);
 }
 
 .blog-divider {
-  width: 9rem;
+  width: 100%;
   margin: 4rem 0 0;
   border: 0;
-  border-top: 1px solid var(--line);
+  border-top: 3px double var(--line-strong);
 }
 
 .content {
-  margin-top: 2.3rem;
+  margin-top: clamp(2.5rem, 7vw, 4rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line-strong);
 }
 
 .content h1,
@@ -206,21 +303,22 @@ a {
   max-width: 100%;
   height: auto;
   margin: 1.5rem 0;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
 }
 
 .content pre {
   overflow-x: auto;
   padding: 1rem;
-  background: var(--panel);
+  background: var(--paper);
   border: 1px solid var(--line);
+  border-left: 4px solid var(--accent-cool);
 }
 
 .content code {
   font-family: "SFMono-Regular", "Menlo", "Monaco", "Cascadia Mono", ui-monospace, monospace;
   font-size: 0.88em;
   padding: 0.15em 0.35em;
-  background: var(--panel);
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 4px;
 }
@@ -236,8 +334,9 @@ a {
 .content blockquote {
   margin: 1.75rem 0;
   padding: 0.2rem 0 0.2rem 1.1rem;
-  color: var(--muted);
-  border-left: 1px solid var(--line);
+  color: var(--text);
+  border-left: 4px solid var(--accent);
+  font-size: 1.08em;
 }
 
 .content blockquote > :first-child {
@@ -252,7 +351,9 @@ a {
   margin: 1.75rem 0;
   padding: 1rem 1.1rem;
   background: var(--message-bg);
-  border-radius: 6px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent-leaf);
+  border-radius: 0;
   line-height: 1.8;
 }
 
@@ -291,6 +392,14 @@ a {
 }
 
 @media (max-width: 640px) {
+  article > h1 {
+    max-width: 100%;
+  }
+
+  .post-entry {
+    grid-template-columns: 1fr;
+  }
+
   .post-entry a {
     font-size: 1rem;
   }
@@ -303,7 +412,8 @@ a {
     <script defer src="/src/behaviors/render-math.js"></script>
   </head>
   <body>
-    <main>
+    <a class="skip-link" href="#main-content">本文へ移動</a>
+    <main id="main-content">
       <nav class="blog-nav" aria-label="ブログ">
         <a href="/posts/">Blog</a>
       </nav>

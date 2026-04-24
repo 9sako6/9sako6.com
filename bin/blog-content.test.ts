@@ -64,4 +64,10 @@ describe("extractSummary", () => {
 
     expect(summary).toBe("TypeScript 4.9 で導入された satisfies 演算子です。");
   });
+
+  test("裸のURLに含まれるアンダースコアを残す", () => {
+    const summary = extractSummary("https://atcoder.jp/contests/abc021/tasks/abc021_d", "fallback");
+
+    expect(summary).toBe("https://atcoder.jp/contests/abc021/tasks/abc021_d");
+  });
 });

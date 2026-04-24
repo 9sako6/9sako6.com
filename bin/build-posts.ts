@@ -376,6 +376,7 @@ ${inlineBlogCss}</style>
     ${mathHead}
   </head>
   <body>
+    <a class="skip-link" href="#main-content">本文へ移動</a>
     ${body}
   </body>
 </html>
@@ -407,7 +408,7 @@ function buildIndexPage(posts: PublishedPost[]): string {
   return layout(
     "Posts | 9sako6",
     "公開済みのブログ記事一覧です。",
-    `<main>
+    `<main id="main-content">
       <nav class="blog-nav" aria-label="ブログ">
         <a href="/posts/">Blog</a>
       </nav>
@@ -430,7 +431,7 @@ function buildPostPage(post: PublishedPost): string {
   return layout(
     `${post.meta.title} | 9sako6`,
     post.meta.description || post.summary,
-    `<main>
+    `<main id="main-content">
       <nav class="blog-nav" aria-label="ブログ">
         <a href="/posts/">Blog</a>
       </nav>

@@ -8,15 +8,15 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <style>
       body {
-        padding: 60px 24px 56px;
+        padding: 48px 24px 56px;
       }
 
       h1 {
         margin: 0;
-        font-size: clamp(2rem, 4.5vw, 2.45rem);
+        font-size: clamp(4rem, 18vw, 9rem);
         font-weight: 500;
-        line-height: 1.24;
-        color: var(--link);
+        line-height: 0.9;
+        color: var(--accent);
       }
 
       p {
@@ -30,10 +30,15 @@
         text-decoration-thickness: 0.08em;
         text-underline-offset: 0.18em;
       }
+
+      main {
+        border-top: 4px solid var(--line-strong);
+      }
     </style>
   </head>
   <body>
-    <main>
+    <a class="skip-link" href="#main-content">本文へ移動</a>
+    <main id="main-content">
       <h1>404</h1>
       <p>お探しのページは見つかりませんでした。</p>
       <p><a href="/">トップへ戻る</a></p>

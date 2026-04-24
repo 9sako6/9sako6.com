@@ -10,15 +10,16 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <style>
       body {
-        padding: 60px 24px 56px;
+        padding: 48px 24px 56px;
       }
 
       h1 {
         margin: 0;
-        font-size: clamp(1.6rem, 3.6vw, 1.9rem);
+        max-width: 9ch;
+        font-size: clamp(2.5rem, 8vw, 5rem);
         font-weight: 500;
-        line-height: 1.28;
-        color: var(--link);
+        line-height: 1.05;
+        color: var(--text);
       }
 
       p {
@@ -28,11 +29,15 @@
 
       .verse {
         margin: 2rem 0 0;
-        padding-left: 1rem;
-        border-left: 1px solid var(--line);
-        color: var(--link);
+        padding: 1rem 0 1rem 1.2rem;
+        border-left: 4px solid var(--accent);
+        color: var(--text);
         font-size: 1.05em;
         line-height: 2;
+      }
+
+      main {
+        border-top: 4px solid var(--line-strong);
       }
 
       @media (max-width: 480px) {
@@ -43,7 +48,8 @@
     </style>
   </head>
   <body>
-    <main>
+    <a class="skip-link" href="#main-content">本文へ移動</a>
+    <main id="main-content">
       <h1>ブログ執筆宣言</h1>
       <p>
         私は、記事の執筆を通じて、より深い理解と洞察を得ることを目指しています。私は以下の価値に至りました。
