@@ -16,6 +16,16 @@ describe("static page accessibility", () => {
     expect(html).toContain('id="main-content"');
   });
 
+  test("スキップリンクは通常表示で画面上に出ず、キーボードフォーカス時だけ表示される", () => {
+    const css = readProjectFile("src/styles/site-shell.css");
+
+    expect(css).toContain("clip-path: inset(50%)");
+    expect(css).toContain("@media (hover: hover) and (pointer: fine)");
+    expect(css).toContain(".skip-link:focus-visible");
+    expect(css).not.toContain(".skip-link:focus {");
+    expect(css).not.toContain("transform: translateY(-150%)");
+  });
+
   test("新規タブで開く外部リンクは opener を共有しない", () => {
     const html = readProjectFile("static/index.html");
     const externalLinkPattern = /<a\b(?=[^>]*\btarget="_blank")[^>]*>/g;

@@ -69,21 +69,37 @@ a:focus-visible {
 
 .skip-link {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 10;
-  padding: 0.55rem 0.8rem;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  z-index: 100;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   background: var(--text);
   color: var(--paper);
+  border: 0;
   font-family: var(--font-ui);
   font-size: 0.9rem;
   line-height: 1.2;
   text-decoration: none;
-  transform: translateY(-150%);
+  white-space: nowrap;
 }
 
-.skip-link:focus {
-  transform: translateY(0);
+@media (hover: hover) and (pointer: fine) {
+  .skip-link:focus-visible {
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0.55rem 0.8rem;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+  }
 }
 
 ::selection {
@@ -98,7 +114,7 @@ a:focus-visible {
   }
 
   a:focus-visible,
-  .skip-link:focus {
+  .skip-link:focus-visible {
     outline: 3px solid CanvasText;
   }
 }
