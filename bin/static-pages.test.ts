@@ -84,6 +84,15 @@ describe("static page accessibility", () => {
     expect(html).toContain("font-size: 1rem;");
     expect(html).toContain(".period");
   });
+
+  test("ブログのPC版横幅はトップページと同じ広さにする", () => {
+    const html = readProjectFile("dist/posts/index.html");
+    const css = readProjectFile("src/styles/blog.css");
+
+    expect(html).toContain('<main id="main-content" class="blog-main">');
+    expect(css).toContain(".blog-main");
+    expect(css).toContain("width: min(100%, 68rem);");
+  });
 });
 
 describe("shared accessibility styles", () => {

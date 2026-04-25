@@ -416,7 +416,7 @@ function buildIndexPage(posts: PublishedPost[]): string {
   return layout(
     "Posts | 9sako6",
     "公開済みのブログ記事一覧です。",
-    `<main id="main-content">
+    `<main id="main-content" class="blog-main">
       <nav class="blog-nav" aria-label="ブログ">
         <a href="/posts/">Blog</a>
       </nav>
@@ -439,7 +439,7 @@ function buildPostPage(post: PublishedPost): string {
   return layout(
     `${post.meta.title} | 9sako6`,
     post.meta.description || post.summary,
-    `<main id="main-content">
+    `<main id="main-content" class="blog-main">
       <nav class="blog-nav" aria-label="ブログ">
         <a href="/posts/">Blog</a>
       </nav>
