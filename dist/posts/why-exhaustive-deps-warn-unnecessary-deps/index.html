@@ -14,6 +14,7 @@
     <meta property="og:url" content="https://9sako6.com/posts/why-exhaustive-deps-warn-unnecessary-deps/" />
     <meta name="twitter:card" content="summary" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="alternate" type="text/markdown" href="/posts/why-exhaustive-deps-warn-unnecessary-deps/index.md" />
     <style>:root {
   color-scheme: dark;
   --bg: #070706;
@@ -594,7 +595,7 @@ export const Counter = () =&gt; {
     setCount((prev) =&gt; prev + 1);
   }, []);
 </code></pre>
-<pre><code class="language-bash">/Users/9sako6/demo/Counter.tsx
+<pre><code class="language-bash">demo/Counter.tsx
   14:6  error  React Hook useCallback has a missing dependency: &#39;setCount&#39;. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 </code></pre>
 <p>技術的に依存配列に含める必要がないオブジェクトを、依存配列に含めるように言われてしまいました。

@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "bun:test";
 
@@ -126,5 +126,41 @@ describe("generated static page cache busting", () => {
     expect(asset.byteLength).toBeGreaterThan(10_000);
     expect(readerAsset.byteLength).toBeGreaterThan(10_000);
     expect(chefAsset.byteLength).toBeGreaterThan(10_000);
+  });
+});
+
+describe("generated GFM markdown alternates", () => {
+  test("公開記事は GFM の Markdown 表現を持つ", () => {
+    const markdownPath = join(rootDir, "dist", "posts", "why-not-how", "index.md");
+
+    expect(existsSync(markdownPath)).toBe(true);
+
+    const markdown = readFileSync(markdownPath, "utf8");
+
+    expect(markdown).toContain('# なぜ "How" の記事を書きたくないか');
+    expect(markdown).toContain("> [!NOTE]\n> 世の中にある \"How\" の記事を批判するつもりは毛頭ありません。");
+    expect(markdown).not.toContain("---\n");
+    expect(markdown).not.toContain(":::message");
+  });
+
+  test("記事 HTML は Markdown 表現を alternate として示す", () => {
+    const html = readProjectFile("dist/posts/why-not-how/index.html");
+
+    expect(html).toContain('<link rel="alternate" type="text/markdown" href="/posts/why-not-how/index.md" />');
+  });
+
+  test("GFM Alert は記事 HTML では既存の message 表示になる", () => {
+    const html = readProjectFile("dist/posts/why-not-how/index.html");
+
+    expect(html).toContain('<aside class="message">');
+    expect(html).toContain("世の中にある &quot;How&quot; の記事を批判するつもりは毛頭ありません。");
+    expect(html).not.toContain("[!NOTE]");
+  });
+
+  test("Markdown 表現は GFM variant の Content-Type を宣言する", () => {
+    const headers = readProjectFile("dist/_headers");
+
+    expect(headers).toContain("/posts/*/index.md");
+    expect(headers).toContain("Content-Type: text/markdown; charset=utf-8; variant=GFM");
   });
 });

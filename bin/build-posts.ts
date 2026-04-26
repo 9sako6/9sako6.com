@@ -40,6 +40,15 @@ function restoreMathBlocks(html: string): string {
 
 marked.use({
   renderer: {
+    blockquote(token) {
+      const alertMatch = token.text.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)]\n([\s\S]+)$/);
+      if (alertMatch) {
+        const [, , body] = alertMatch;
+        return `<aside class="message">${this.parser.parse(marked.lexer(body))}</aside>`;
+      }
+
+      return `<blockquote>\n${this.parser.parse(token.tokens)}</blockquote>\n`;
+    },
     image(token) {
       const href = token.href?.split("?")[0] ?? "";
       const dimensions = currentImageDimensions[href];
@@ -173,6 +182,8 @@ const outputDir = join(rootDir, "dist");
 const outputPostsDir = join(outputDir, "posts");
 const outputImagesDir = join(outputDir, "images");
 const redirectsPath = join(outputDir, "_redirects");
+const headersPath = join(outputDir, "_headers");
+const markdownContentType = "text/markdown; charset=utf-8; variant=GFM";
 const staticEntries = ["404.html", "about", "assets", "favicon.ico", "index.html"] as const;
 const categoryOrder = ["Technology", "Random", "Competitive Programming"] as const;
 const inlineSiteShellCss = readFileSync(join(rootDir, "src", "styles", "site-shell.css"), "utf8");
@@ -351,7 +362,7 @@ function layout(
   title: string,
   description: string,
   body: string,
-  options?: { includeMath?: boolean; pathname?: string; ogType?: "website" | "article" }
+  options?: { includeMath?: boolean; pathname?: string; ogType?: "website" | "article"; alternateMarkdownPath?: string }
 ): string {
   const mathHead = options?.includeMath
     ? `
@@ -362,6 +373,9 @@ function layout(
     : "";
   const canonicalUrl = new URL(options?.pathname ?? "/", siteUrl).toString();
   const ogType = options?.ogType ?? "website";
+  const alternateMarkdownLink = options?.alternateMarkdownPath
+    ? `\n    <link rel="alternate" type="text/markdown" href="${escapeHtml(options.alternateMarkdownPath)}" />`
+    : "";
 
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -378,7 +392,7 @@ function layout(
     <meta property="og:type" content="${escapeHtml(ogType)}" />
     <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
     <meta name="twitter:card" content="summary" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />${alternateMarkdownLink}
     <style>${inlineSiteShellCss}
 ${inlineBlogCss}</style>
     ${mathHead}
@@ -461,8 +475,12 @@ function buildPostPage(post: PublishedPost): string {
         <a href="/posts/">← 記事一覧へ</a>
       </nav>
     </main>`,
-    { includeMath, pathname: `/posts/${post.slug}/`, ogType: "article" }
+    { includeMath, pathname: `/posts/${post.slug}/`, ogType: "article", alternateMarkdownPath: `/posts/${post.slug}/index.md` }
   );
+}
+
+function buildGfmPostMarkdown(post: PublishedPost): string {
+  return [`# ${post.meta.title}`, "", post.body.trim(), ""].join("\n");
 }
 
 function cleanOutput() {
@@ -525,7 +543,14 @@ function writePosts(posts: PublishedPost[]) {
     const postDir = join(outputPostsDir, post.slug);
     mkdirSync(postDir, { recursive: true });
     writeFileSync(join(postDir, "index.html"), buildPostPage(post));
+    writeFileSync(join(postDir, "index.md"), buildGfmPostMarkdown(post));
   }
+}
+
+function writeHeaders() {
+  const lines = ["/posts/*/index.md", `  Content-Type: ${markdownContentType}`];
+
+  writeFileSync(headersPath, lines.join("\n") + "\n");
 }
 
 function writeRedirects(posts: PublishedPost[]) {
@@ -557,6 +582,7 @@ function main() {
   writePosts(posts);
   copyReferencedImages(posts);
   writeRedirects(posts);
+  writeHeaders();
 }
 
 main();

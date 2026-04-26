@@ -2,6 +2,7 @@ import { join, normalize, resolve } from "node:path";
 
 const rootDir = resolve(process.cwd(), "dist");
 const port = Number(process.env.PORT ?? "3000");
+const markdownContentType = "text/markdown; charset=utf-8; variant=GFM";
 
 function toFilePath(url: URL): { path: string; redirect?: string } {
   const pathname = decodeURIComponent(url.pathname);
@@ -34,7 +35,8 @@ Bun.serve({
     }
 
     if (await file.exists()) {
-      return new Response(file);
+      const headers = path.endsWith(".md") ? { "Content-Type": markdownContentType } : undefined;
+      return new Response(file, { headers });
     }
 
     const notFoundFile = Bun.file(join(rootDir, "404.html"));
