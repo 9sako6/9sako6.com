@@ -1,6 +1,6 @@
 import { join, normalize, resolve } from "node:path";
 
-const rootDir = resolve(process.cwd(), "dist");
+const rootDir = resolve(process.cwd(), process.env.BLOG_ROOT_DIR ?? "dist");
 const port = Number(process.env.PORT ?? "3000");
 const markdownContentType = "text/markdown; charset=utf-8; variant=GFM";
 

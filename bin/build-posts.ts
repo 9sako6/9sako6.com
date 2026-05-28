@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
-import { collectLocalImagePaths, extractSummary, parsePostFile } from "./blog-content";
+import { collectLocalImagePaths, extractSummary, parsePostFile, shouldIncludePost } from "./blog-content";
 import { formatPostDate } from "./format-date";
 
 const footnoteState = {
@@ -178,7 +178,7 @@ const contentDir = join(rootDir, "content", "blog");
 const staticDir = join(rootDir, "static");
 const sourcePostsDir = join(contentDir, "posts");
 const sourceImagesDir = join(contentDir, "public", "images");
-const outputDir = join(rootDir, "dist");
+const outputDir = resolve(rootDir, process.env.BLOG_OUTPUT_DIR ?? "dist");
 const outputPostsDir = join(outputDir, "posts");
 const outputImagesDir = join(outputDir, "images");
 const redirectsPath = join(outputDir, "_redirects");
@@ -195,6 +195,8 @@ const styleAssetVersion = createHash("sha256")
   .digest("hex")
   .slice(0, 12);
 let currentImageDimensions: Record<string, ImageDimensions> = {};
+const includeDrafts = process.env.BLOG_INCLUDE_DRAFTS === "true";
+const allowMissingImages = process.env.BLOG_ALLOW_MISSING_IMAGES === "true";
 
 function escapeHtml(value: string): string {
   return value
@@ -304,13 +306,18 @@ function collectImageDimensions(paths: string[]): Record<string, ImageDimensions
   return Object.fromEntries(
     paths.flatMap((imagePath) => {
       const relativePath = imagePath.replace(/^\/images\//, "");
-      const dimensions = readImageDimensions(join(sourceImagesDir, relativePath));
+      const sourcePath = join(sourceImagesDir, relativePath);
+      if (!existsSync(sourcePath) && allowMissingImages) {
+        return [];
+      }
+
+      const dimensions = readImageDimensions(sourcePath);
       return dimensions ? [[imagePath, dimensions]] : [];
     })
   );
 }
 
-function readPublishedPosts(): PublishedPost[] {
+function readPosts(): PublishedPost[] {
   const entries = readdirSync(sourcePostsDir)
     .filter((name) => name.endsWith(".md"))
     .map((name) => {
@@ -318,7 +325,7 @@ function readPublishedPosts(): PublishedPost[] {
       const raw = readFileSync(path, "utf8");
       return parsePostFile(path, raw);
     })
-    .filter((post) => post.meta.published)
+    .filter((post) => shouldIncludePost(post.meta, { includeDrafts }))
     .map((post) => {
       const localImages = collectLocalImagePaths(post.body);
 
@@ -528,6 +535,10 @@ function copyReferencedImages(posts: PublishedPost[]) {
     const targetPath = join(outputImagesDir, relativePath);
 
     if (!existsSync(sourcePath)) {
+      if (allowMissingImages) {
+        continue;
+      }
+
       throw new Error(`Missing image: ${sourcePath}`);
     }
 
@@ -576,7 +587,7 @@ function writeRedirects(posts: PublishedPost[]) {
 }
 
 function main() {
-  const posts = readPublishedPosts();
+  const posts = readPosts();
   cleanOutput();
   copyStaticEntries();
   writePosts(posts);

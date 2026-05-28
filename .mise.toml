@@ -19,5 +19,8 @@ run = "bun run generate"
 
 [tasks.dev]
 description = "Generate the site and serve it locally with Bun"
-depends = ["generate"]
-run = "bun run dev"
+depends = ["content:sync"]
+run = """
+BLOG_INCLUDE_DRAFTS=true BLOG_ALLOW_MISSING_IMAGES=true BLOG_OUTPUT_DIR=.dev-dist bun run generate
+BLOG_ROOT_DIR=.dev-dist bun run dev
+"""

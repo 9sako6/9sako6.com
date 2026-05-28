@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { collectLocalImagePaths, extractSummary, parsePostFile } from "./blog-content";
+import { collectLocalImagePaths, extractSummary, parsePostFile, shouldIncludePost } from "./blog-content";
 
 describe("parsePostFile", () => {
   test("published true の記事だけを frontmatter から判定できる", () => {
@@ -49,9 +49,26 @@ describe("collectLocalImagePaths", () => {
 ![icon](/images/icon.obake.webp)
 ![remote](//images.ctfassets.net/example.png)
 ![with-query](/images/photo.webp?fm=webp)
+<img src="/images/gallery/item.jpeg" alt="">
+<img src="https://example.com/remote.jpeg" alt="">
 `);
 
-    expect(paths).toEqual(["/images/icon.obake.webp", "/images/photo.webp"]);
+    expect(paths).toEqual(["/images/icon.obake.webp", "/images/photo.webp", "/images/gallery/item.jpeg"]);
+  });
+});
+
+describe("shouldIncludePost", () => {
+  test("通常ビルドでは公開記事だけを含める", () => {
+    expect(shouldIncludePost({ published: true })).toBe(true);
+    expect(shouldIncludePost({ published: false })).toBe(false);
+  });
+
+  test("ローカルプレビューでは未公開記事も含める", () => {
+    expect(shouldIncludePost({ published: false }, { includeDrafts: true })).toBe(true);
+  });
+
+  test("ローカルプレビューでは日付が壊れた未公開記事を除外する", () => {
+    expect(shouldIncludePost({ published: false, date: "2023-08-10T23:50:37.0${millisecond}+09:00" }, { includeDrafts: true })).toBe(false);
   });
 });
 

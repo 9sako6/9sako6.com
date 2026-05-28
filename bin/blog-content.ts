@@ -6,6 +6,8 @@ export type PostMeta = {
   date: string;
 };
 
+type PostPublication = Pick<PostMeta, "published"> & Partial<Pick<PostMeta, "date">>;
+
 export type ParsedPost = {
   slug: string;
   meta: PostMeta;
@@ -13,7 +15,8 @@ export type ParsedPost = {
 };
 
 const FRONTMATTER_RE = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/;
-const LOCAL_IMAGE_RE = /!\[[^\]]*]\((\/images\/[^)\s?]+(?:\?[^)\s]*)?)\)/g;
+const LOCAL_MARKDOWN_IMAGE_RE = /!\[[^\]]*]\((\/images\/[^)\s?]+(?:\?[^)\s]*)?)\)/g;
+const LOCAL_HTML_IMAGE_RE = /<img\b[^>]*\bsrc=(["'])(\/images\/[^"'\s?]+(?:\?[^"'\s]*)?)\1[^>]*>/g;
 
 function readFrontmatterValue(frontmatter: string, key: string): string | null {
   const match = frontmatter.match(new RegExp(`^${key}:\\s*(.+)$`, "m"));
@@ -51,11 +54,30 @@ export function parsePostFile(path: string, raw: string): ParsedPost {
   };
 }
 
+export function shouldIncludePost(post: PostPublication, options: { includeDrafts?: boolean } = {}): boolean {
+  if (post.published) {
+    return true;
+  }
+
+  if (options.includeDrafts !== true) {
+    return false;
+  }
+
+  return post.date === undefined || Number.isFinite(new Date(post.date).getTime());
+}
+
 export function collectLocalImagePaths(markdown: string): string[] {
   const paths = new Set<string>();
 
-  for (const match of markdown.matchAll(LOCAL_IMAGE_RE)) {
+  for (const match of markdown.matchAll(LOCAL_MARKDOWN_IMAGE_RE)) {
     const path = match[1]?.split("?")[0];
+    if (path) {
+      paths.add(path);
+    }
+  }
+
+  for (const match of markdown.matchAll(LOCAL_HTML_IMAGE_RE)) {
+    const path = match[2]?.split("?")[0];
     if (path) {
       paths.add(path);
     }
