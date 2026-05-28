@@ -6,7 +6,8 @@
   "scripts": {
     "test": "bun test",
     "generate": "bun run bin/build-posts.ts",
-    "dev": "bun run bin/dev-server.ts"
+    "dev": "bun run bin/dev-server.ts",
+    "dev:content": "bun run bin/dev-content.ts"
   },
   "dependencies": {
     "marked": "^15.0.12"

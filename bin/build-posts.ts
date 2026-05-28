@@ -1,8 +1,9 @@
 import { createHash } from "node:crypto";
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
+import { resolveContentDir, resolveOutputDir } from "./build-config";
 import { collectLocalImagePaths, extractSummary, parsePostFile, shouldIncludePost } from "./blog-content";
 import { formatPostDate } from "./format-date";
 
@@ -174,11 +175,11 @@ type ImageDimensions = {
 };
 
 const rootDir = fileURLToPath(new URL("../", import.meta.url));
-const contentDir = join(rootDir, "content", "blog");
+const contentDir = resolveContentDir(rootDir);
 const staticDir = join(rootDir, "static");
 const sourcePostsDir = join(contentDir, "posts");
 const sourceImagesDir = join(contentDir, "public", "images");
-const outputDir = resolve(rootDir, process.env.BLOG_OUTPUT_DIR ?? "dist");
+const outputDir = resolveOutputDir(rootDir);
 const outputPostsDir = join(outputDir, "posts");
 const outputImagesDir = join(outputDir, "images");
 const redirectsPath = join(outputDir, "_redirects");
