@@ -384,6 +384,19 @@ a {
   border: 1px solid var(--line);
 }
 
+.content .image-masonry {
+  column-count: 3;
+  column-gap: 0.75rem;
+  margin: 3rem 0 0;
+}
+
+.content .image-masonry img {
+  width: 100%;
+  margin: 0 0 0.75rem;
+  break-inside: avoid;
+  border: 1px solid var(--line);
+}
+
 .content pre {
   overflow-x: auto;
   padding: 1rem;
@@ -501,6 +514,10 @@ a {
 
   .post-entry a {
     font-size: 1rem;
+  }
+
+  .content .image-masonry {
+    column-count: 2;
   }
 }
 

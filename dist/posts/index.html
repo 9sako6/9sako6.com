@@ -383,6 +383,19 @@ a {
   border: 1px solid var(--line);
 }
 
+.content .image-masonry {
+  column-count: 3;
+  column-gap: 0.75rem;
+  margin: 3rem 0 0;
+}
+
+.content .image-masonry img {
+  width: 100%;
+  margin: 0 0 0.75rem;
+  break-inside: avoid;
+  border: 1px solid var(--line);
+}
+
 .content pre {
   overflow-x: auto;
   padding: 1rem;
@@ -501,6 +514,10 @@ a {
   .post-entry a {
     font-size: 1rem;
   }
+
+  .content .image-masonry {
+    column-count: 2;
+  }
 }
 
 @keyframes post-reader-float {
@@ -587,6 +604,11 @@ a {
         <h2 id="category-random">Random</h2>
         <ul class="post-list">
           <li class="post-entry">
+            <a href="/posts/everyday-is-vivid/">3ヶ月間毎日新しいことをした</a>
+            <time datetime="2026-05-29T00:00:00.000+09:00">2026年5月29日</time>
+            <p>2026年1月1日から2026年3月20日まで、およそ3ヶ月間の記録です。 毎日なにか新しい体験をする縛りで生きていました。</p>
+          </li>
+<li class="post-entry">
             <a href="/posts/why-not-how/">なぜ &quot;How&quot; の記事を書きたくないか</a>
             <time datetime="2024-01-21T12:40:49.960Z">2024年1月21日</time>
             <p>私はこのブログで、&quot;How&quot; よりも &quot;Why&quot; に焦点を当てた内容を書くことに努めています。 道具の使い方や技術紹介ではなく、それらが、なぜその形で在るのか、どんな問題を解決するために存在するのかを考えたいと思っています。</p>
