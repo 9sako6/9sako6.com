@@ -1,6 +1,7 @@
 import { existsSync, watch } from "node:fs";
 import { resolve } from "node:path";
 import { resolveContentDir, resolveOutputDir } from "./build-config";
+import { createBuildQueue } from "./dev-build-queue";
 
 const rootDir = resolve(process.cwd());
 const contentDir = resolveContentDir(rootDir);
@@ -52,7 +53,7 @@ console.log(`Watching ${contentDir}`);
 await build();
 
 const server = startServer();
-let building = false;
+const buildQueue = createBuildQueue(build);
 
 function shutdown(code: number) {
   server.kill();
@@ -63,18 +64,11 @@ process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
 watch(contentDir, { recursive: true }, async () => {
-  if (building) {
-    return;
-  }
-
-  building = true;
   try {
-    await build();
+    await buildQueue.requestBuild();
   } catch (error) {
     console.error(error);
     shutdown(1);
-  } finally {
-    building = false;
   }
 });
 
