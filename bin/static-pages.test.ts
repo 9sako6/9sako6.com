@@ -1,12 +1,39 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 
 const rootDir = join(import.meta.dir, "..");
+const generatedDistDir = join(tmpdir(), `9sako6-static-pages-test-${Date.now()}`);
 
 function readProjectFile(path: string): string {
   return readFileSync(join(rootDir, path), "utf8");
 }
+
+function readGeneratedFile(path: string): string {
+  return readFileSync(join(generatedDistDir, path), "utf8");
+}
+
+beforeAll(async () => {
+  const proc = Bun.spawn(["bun", "run", "generate"], {
+    cwd: rootDir,
+    env: {
+      ...process.env,
+      BLOG_OUTPUT_DIR: generatedDistDir
+    },
+    stdout: "inherit",
+    stderr: "inherit"
+  });
+
+  const code = await proc.exited;
+  if (code !== 0) {
+    throw new Error(`bun run generate exited with ${code}`);
+  }
+});
+
+afterAll(() => {
+  rmSync(generatedDistDir, { recursive: true, force: true });
+});
 
 describe("static page accessibility", () => {
   test("トップページは本文へ移動できるスキップリンクを持つ", () => {
@@ -47,7 +74,7 @@ describe("static page accessibility", () => {
   });
 
   test("記事詳細ページのキャラクター切り替えは装飾として扱う", () => {
-    const html = readProjectFile("dist/posts/yukicoder909/index.html");
+    const html = readGeneratedFile("posts/yukicoder909/index.html");
 
     expect(html).toContain('class="post-reader"');
     expect(html).toContain('aria-hidden="true"');
@@ -86,7 +113,7 @@ describe("static page accessibility", () => {
   });
 
   test("ブログのPC版横幅はトップページと同じ広さにする", () => {
-    const html = readProjectFile("dist/posts/index.html");
+    const html = readGeneratedFile("posts/index.html");
     const css = readProjectFile("src/styles/blog.css");
 
     expect(html).toContain('<main id="main-content" class="blog-main">');
@@ -112,16 +139,16 @@ describe("shared accessibility styles", () => {
 
 describe("generated static page cache busting", () => {
   test("固定ページのCSS参照は生成後にバージョン付きURLになる", () => {
-    const html = readProjectFile("dist/index.html");
+    const html = readGeneratedFile("index.html");
 
     expect(html).toMatch(/href="\/src\/styles\/site-shell\.css\?v=[a-f0-9]{12}"/);
     expect(html).not.toContain('href="/src/styles/site-shell.css"');
   });
 
   test("固定ページ用の画像アセットも生成先に含める", () => {
-    const asset = readFileSync(join(rootDir, "dist", "assets", "ghost-01.png"));
-    const readerAsset = readFileSync(join(rootDir, "dist", "assets", "reader-ghost.png"));
-    const chefAsset = readFileSync(join(rootDir, "dist", "assets", "chef-ghost.png"));
+    const asset = readFileSync(join(generatedDistDir, "assets", "ghost-01.png"));
+    const readerAsset = readFileSync(join(generatedDistDir, "assets", "reader-ghost.png"));
+    const chefAsset = readFileSync(join(generatedDistDir, "assets", "chef-ghost.png"));
 
     expect(asset.byteLength).toBeGreaterThan(10_000);
     expect(readerAsset.byteLength).toBeGreaterThan(10_000);
@@ -131,7 +158,7 @@ describe("generated static page cache busting", () => {
 
 describe("generated GFM markdown alternates", () => {
   test("公開記事は GFM の Markdown 表現を持つ", () => {
-    const markdownPath = join(rootDir, "dist", "posts", "why-not-how", "index.md");
+    const markdownPath = join(generatedDistDir, "posts", "why-not-how", "index.md");
 
     expect(existsSync(markdownPath)).toBe(true);
 
@@ -144,13 +171,13 @@ describe("generated GFM markdown alternates", () => {
   });
 
   test("記事 HTML は Markdown 表現を alternate として示す", () => {
-    const html = readProjectFile("dist/posts/why-not-how/index.html");
+    const html = readGeneratedFile("posts/why-not-how/index.html");
 
     expect(html).toContain('<link rel="alternate" type="text/markdown" href="/posts/why-not-how/index.md" />');
   });
 
   test("GFM Alert は記事 HTML では既存の message 表示になる", () => {
-    const html = readProjectFile("dist/posts/why-not-how/index.html");
+    const html = readGeneratedFile("posts/why-not-how/index.html");
 
     expect(html).toContain('<aside class="message">');
     expect(html).toContain("世の中にある &quot;How&quot; の記事を批判するつもりは毛頭ありません。");
@@ -158,7 +185,7 @@ describe("generated GFM markdown alternates", () => {
   });
 
   test("Markdown 表現は GFM variant の Content-Type を宣言する", () => {
-    const headers = readProjectFile("dist/_headers");
+    const headers = readGeneratedFile("_headers");
 
     expect(headers).toContain("/posts/*/index.md");
     expect(headers).toContain("Content-Type: text/markdown; charset=utf-8; variant=GFM");
