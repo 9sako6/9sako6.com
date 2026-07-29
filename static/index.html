@@ -43,8 +43,9 @@
         margin: 0;
         color: var(--text);
         font-family: var(--font-display);
-        font-size: 0.76rem;
+        font-size: 1.125rem;
         font-weight: 500;
+        line-height: 1.5;
         letter-spacing: 0;
         text-transform: uppercase;
       }
@@ -96,6 +97,17 @@
 
       a:hover {
         color: var(--link-entry-hover);
+      }
+
+      .skip-link:focus-visible {
+        width: auto;
+        height: auto;
+        margin: 0;
+        padding: 0.55rem 0.8rem;
+        overflow: visible;
+        clip: auto;
+        clip-path: none;
+        white-space: normal;
       }
 
       .profile-issue {
@@ -184,7 +196,7 @@
         color: var(--text);
         background: color-mix(in srgb, var(--paper) 72%, transparent);
         font-family: var(--font-display);
-        font-size: 0.98rem;
+        font-size: 1rem;
         font-weight: 500;
         text-decoration: none;
       }
@@ -222,8 +234,9 @@
         display: block;
         color: var(--muted);
         font-family: var(--font-display);
-        font-size: 0.95rem;
+        font-size: 1rem;
         font-weight: 500;
+        line-height: 1.55;
       }
 
       .place {
@@ -259,8 +272,6 @@
 
         .career h2 {
           margin-bottom: 1rem;
-          font-size: 1rem;
-          letter-spacing: 0;
         }
 
         .links a {
@@ -344,7 +355,7 @@
   </head>
   <body>
     <a class="skip-link" href="#main-content">本文へ移動</a>
-    <main id="main-content" class="profile-issue">
+    <main id="main-content" class="profile-issue" tabindex="-1">
       <div class="issue-bar" aria-hidden="true"></div>
 
       <header class="hero">
@@ -362,8 +373,8 @@
             <nav aria-label="プロフィールリンク">
               <ul class="links">
                 <li><a href="/posts/">Blog</a></li>
-                <li><a href="https://x.com/9sako6" target="_blank" rel="noopener noreferrer">X</a></li>
-                <li><a href="https://github.com/9sako6" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <li><a href="https://x.com/9sako6" target="_blank" rel="noopener noreferrer" aria-label="X（新しいタブで開く）">X</a></li>
+                <li><a href="https://github.com/9sako6" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新しいタブで開く）">GitHub</a></li>
               </ul>
             </nav>
           </div>

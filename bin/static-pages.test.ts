@@ -13,7 +13,9 @@ describe("static page accessibility", () => {
     const html = readProjectFile("static/index.html");
 
     expect(html).toContain('href="#main-content"');
-    expect(html).toContain('id="main-content"');
+    expect(html).toContain('id="main-content" class="profile-issue" tabindex="-1"');
+    expect(html).toContain(".skip-link:focus-visible");
+    expect(html).toContain("clip-path: none");
   });
 
   test("スキップリンクは通常表示で画面上に出ず、キーボードフォーカス時だけ表示される", () => {
@@ -71,10 +73,24 @@ describe("static page accessibility", () => {
     const html = readProjectFile("static/index.html");
 
     expect(html).toContain(".career h2");
-    expect(html).toContain("font-size: 1rem;");
     expect(html).toContain(".period");
   });
 
+  test("デスクトップ表示でも経歴と補助情報を16px以上に保つ", () => {
+    const html = readProjectFile("static/index.html");
+
+    expect(html).toContain("font-size: 1.125rem;");
+    expect(html).not.toContain("font-size: 0.76rem;");
+    expect(html).not.toContain("font-size: 0.95rem;");
+    expect(html).not.toContain("font-size: 0.98rem;");
+  });
+
+  test("新しいタブで開くリンクは支援技術にも挙動を伝える", () => {
+    const html = readProjectFile("static/index.html");
+
+    expect(html).toContain('aria-label="X（新しいタブで開く）"');
+    expect(html).toContain('aria-label="GitHub（新しいタブで開く）"');
+  });
 });
 
 describe("shared accessibility styles", () => {
