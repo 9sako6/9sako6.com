@@ -53,6 +53,20 @@ describe("generated pages", () => {
     expect(css).toContain("width: min(100%, 68rem);");
   });
 
+  test("記事一覧はカテゴリで分けず作成日時の降順にする", () => {
+    const html = readGeneratedFile("posts/index.html");
+    const newerPostPosition = html.indexOf('href="/posts/yukicoder909/"');
+    const olderPostPosition = html.indexOf('href="/posts/why-not-how/"');
+
+    expect(newerPostPosition).toBeGreaterThan(-1);
+    expect(olderPostPosition).toBeGreaterThan(-1);
+    expect(newerPostPosition).toBeLessThan(olderPostPosition);
+    expect(html.match(/class="post-list"/g)).toHaveLength(1);
+    expect(html).not.toContain('class="post-index-section"');
+    expect(html).not.toContain(">Random</h2>");
+    expect(html).not.toContain(">Competitive Programming</h2>");
+  });
+
   test("固定ページのCSS参照は生成後にバージョン付きURLになる", () => {
     const html = readGeneratedFile("index.html");
 

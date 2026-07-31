@@ -162,13 +162,6 @@ type PublishedPost = ReturnType<typeof parsePostFile> & {
   imageDimensions: Record<string, ImageDimensions>;
 };
 
-type CategorySection = {
-  id: string;
-  key: string;
-  title: string;
-  posts: PublishedPost[];
-};
-
 type ImageDimensions = {
   width: number;
   height: number;
@@ -186,7 +179,6 @@ const redirectsPath = join(outputDir, "_redirects");
 const headersPath = join(outputDir, "_headers");
 const markdownContentType = "text/markdown; charset=utf-8; variant=GFM";
 const staticEntries = ["404.html", "about", "assets", "favicon.ico", "index.html"] as const;
-const categoryOrder = ["Technology", "Random", "Competitive Programming"] as const;
 const inlineSiteShellCss = readFileSync(join(rootDir, "src", "styles", "site-shell.css"), "utf8");
 const inlineBlogCss = readFileSync(join(rootDir, "src", "styles", "blog.css"), "utf8");
 const styleAssetVersion = createHash("sha256")
@@ -337,33 +329,9 @@ function readPosts(): PublishedPost[] {
         imageDimensions: collectImageDimensions(localImages)
       };
     })
-    .sort((left, right) => right.meta.date.localeCompare(left.meta.date));
+    .sort((left, right) => new Date(right.meta.date).getTime() - new Date(left.meta.date).getTime());
 
   return entries;
-}
-
-function groupPostsByCategory(posts: PublishedPost[]): CategorySection[] {
-  const grouped = new Map<string, PublishedPost[]>();
-
-  for (const post of posts) {
-    const category = post.meta.category || "Random";
-    const current = grouped.get(category) ?? [];
-    current.push(post);
-    grouped.set(category, current);
-  }
-
-  const extraCategories = [...grouped.keys()]
-    .filter((key) => !categoryOrder.includes(key as (typeof categoryOrder)[number]))
-    .sort((left, right) => left.localeCompare(right));
-
-  return [...categoryOrder, ...extraCategories]
-    .map((key) => ({
-      id: key.toLowerCase().replaceAll(" ", "-"),
-      key,
-      title: key,
-      posts: grouped.get(key) ?? []
-    }))
-    .filter((section) => section.posts.length > 0);
 }
 
 function layout(
@@ -414,25 +382,14 @@ ${inlineBlogCss}</style>
 }
 
 function buildIndexPage(posts: PublishedPost[]): string {
-  const sections = groupPostsByCategory(posts)
-    .map((section) => {
-      const items = section.posts
-        .map(
-          (post) => `<li class="post-entry">
-            <a href="/posts/${post.slug}/">${escapeHtml(post.meta.title)}</a>
-            <time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time>
-            <p>${escapeHtml(post.summary)}</p>
-          </li>`
-        )
-        .join("\n");
-
-      return `<section class="post-index-section" aria-labelledby="category-${escapeHtml(section.id)}">
-        <h2 id="category-${escapeHtml(section.id)}">${escapeHtml(section.title)}</h2>
-        <ul class="post-list">
-          ${items}
-        </ul>
-      </section>`;
-    })
+  const items = posts
+    .map(
+      (post) => `<li class="post-entry">
+        <a href="/posts/${post.slug}/">${escapeHtml(post.meta.title)}</a>
+        <time datetime="${escapeHtml(post.meta.date)}">${escapeHtml(formatPostDate(post.meta.date))}</time>
+        <p>${escapeHtml(post.summary)}</p>
+      </li>`
+    )
     .join("\n");
 
   return layout(
@@ -443,7 +400,9 @@ function buildIndexPage(posts: PublishedPost[]): string {
         <a href="/posts/">Blog</a>
       </nav>
       <h1 class="sr-only">ブログ記事一覧</h1>
-      ${sections}
+      <ul class="post-list">
+        ${items}
+      </ul>
       <nav class="back-link">
         <a href="/">← トップへ</a>
       </nav>
