@@ -2,13 +2,14 @@
 bun = "1.3.11"
 
 [tasks."content:sync"]
-description = "Clone or pull the content/blog source repository"
+description = "Clone or pull the content repository configured in BLOG_CONTENT_REPO"
 run = """
 if [ -d content/blog/.git ]; then
   git -C content/blog pull --ff-only
 else
+  : "${BLOG_CONTENT_REPO:?Set BLOG_CONTENT_REPO to the content repository URL}"
   mkdir -p content
-  git clone git@github.com:9sako6/blog.git content/blog
+  git clone "$BLOG_CONTENT_REPO" content/blog
 fi
 """
 
