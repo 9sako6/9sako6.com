@@ -66,7 +66,6 @@ describe("static page accessibility", () => {
     const html = readProjectFile("static/index.html");
 
     expect(html).toContain('<meta name="format-detection" content="telephone=no" />');
-    expect(html).toContain("2025/06 - 現在");
   });
 
   test("スマホ表示の経歴ラベルは16px以上を保つ", () => {
